@@ -23,6 +23,7 @@ public class User implements Serializable {
     private String email;
 
     @Getter
+    @Setter
     private final String username;
 
     @Getter

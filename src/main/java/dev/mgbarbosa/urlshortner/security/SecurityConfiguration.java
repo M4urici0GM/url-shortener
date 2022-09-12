@@ -2,6 +2,7 @@ package dev.mgbarbosa.urlshortner.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,7 +28,9 @@ public class SecurityConfiguration {
             .cors()
             .and().authorizeHttpRequests()
             .antMatchers("/api/v*/auth/**").permitAll()
-            .antMatchers("/api/v*/shortener/public").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/v*/shortener").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/v*/user").permitAll()
+            .antMatchers( "/api/v*/user").hasRole("ADMIN")
             .antMatchers("/api/v*/**").authenticated()
             .and()
             .userDetailsService(userDetailService)

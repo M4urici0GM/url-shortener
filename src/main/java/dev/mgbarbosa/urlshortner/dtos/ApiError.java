@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiError<T> {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @Getter
     private final LocalDateTime timestamp;
 

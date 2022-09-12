@@ -2,6 +2,7 @@ package dev.mgbarbosa.urlshortner.controllers;
 
 import dev.mgbarbosa.urlshortner.dtos.ApiError;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
+import dev.mgbarbosa.urlshortner.exceptios.InvalidCredentialsException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -51,6 +52,14 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityExists.class)
     ResponseEntity<Object> entityExistsHandler(EntityExists ex) {
         var apiError = new ApiError(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidCredentialsException.class)
+    ResponseEntity<Object> invalidCredentials(InvalidCredentialsException ex) {
+        var apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
 
