@@ -4,7 +4,7 @@ import dev.mgbarbosa.urlshortner.dtos.ShortenedUrlDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;
-import dev.mgbarbosa.urlshortner.repositories.ShortedUrlRepository;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.security.UserClaims;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

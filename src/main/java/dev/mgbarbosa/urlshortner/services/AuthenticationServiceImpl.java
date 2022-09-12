@@ -4,7 +4,7 @@ import dev.mgbarbosa.urlshortner.dtos.AuthenticatedUserDto;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequest;
 import dev.mgbarbosa.urlshortner.exceptios.InvalidCredentialsException;
-import dev.mgbarbosa.urlshortner.repositories.UserRepository;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import dev.mgbarbosa.urlshortner.security.JwtUtils;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;

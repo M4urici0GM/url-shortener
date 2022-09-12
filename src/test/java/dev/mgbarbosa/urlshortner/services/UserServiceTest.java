@@ -4,7 +4,7 @@ import dev.mgbarbosa.urlshortner.dtos.PaginatedRequest;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.entities.User;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
-import dev.mgbarbosa.urlshortner.repositories.UserRepository;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import dev.mgbarbosa.urlshortner.services.interfaces.PagingUtils;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import com.github.javafaker.Faker;

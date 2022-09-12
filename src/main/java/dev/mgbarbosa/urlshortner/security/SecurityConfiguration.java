@@ -21,6 +21,12 @@ public class SecurityConfiguration {
         this.userDetailService = userDetailService;
     }
 
+    /**
+     * Configure basic stuff about how http requests should be handled/denied
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()

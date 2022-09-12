@@ -1,6 +1,6 @@
 package dev.mgbarbosa.urlshortner.security;
 
-import dev.mgbarbosa.urlshortner.repositories.UserRepository;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

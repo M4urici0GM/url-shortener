@@ -22,6 +22,14 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
         this.userDetailService = userDetailService;
     }
 
+    /**
+     * Responsible for filtering and/or denying unauthorized http requests.
+     * @param request HttpRequest
+     * @param response HttpResponse
+     * @param filterChain ??
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,

@@ -1,4 +1,4 @@
-package dev.mgbarbosa.urlshortner.repositories;
+package dev.mgbarbosa.urlshortner.repositories.interfaces;
 
 import dev.mgbarbosa.urlshortner.entities.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,3 +12,4 @@ public interface UserRepository extends PagingAndSortingRepository<User, UUID> {
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 }
+

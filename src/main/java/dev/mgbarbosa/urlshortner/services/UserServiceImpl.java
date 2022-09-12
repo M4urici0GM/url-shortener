@@ -5,24 +5,27 @@ import dev.mgbarbosa.urlshortner.dtos.PaginatedResponse;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.entities.User;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
-import dev.mgbarbosa.urlshortner.repositories.UserRepository;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import dev.mgbarbosa.urlshortner.services.interfaces.PagingUtils;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final SecurityService securityService;
+    private final PagingUtils pagingUtils;
 
-    @Autowired
-    SecurityService securityService;
-
-    @Autowired
-    PagingUtils pagingUtils;
+    public UserServiceImpl(
+            UserRepository userRepository,
+            SecurityService securityService,
+            PagingUtils pagingUtils) {
+        this.userRepository = userRepository;
+        this.securityService = securityService;
+        this.pagingUtils = pagingUtils;
+    }
 
     @Override
     public PaginatedResponse<UserDto> getUsers(PaginatedRequest request) {

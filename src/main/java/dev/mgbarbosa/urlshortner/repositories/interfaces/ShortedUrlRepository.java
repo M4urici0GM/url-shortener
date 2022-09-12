@@ -1,4 +1,4 @@
-package dev.mgbarbosa.urlshortner.repositories;
+package dev.mgbarbosa.urlshortner.repositories.interfaces;
 
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import org.springframework.data.repository.PagingAndSortingRepository;
