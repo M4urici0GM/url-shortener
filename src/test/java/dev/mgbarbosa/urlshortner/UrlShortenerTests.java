@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
-class AccessingDataMongodbApplicationTests {
+class UrlShortenerTests {
 
 	@Autowired
 	private RedisTemplate<?, ?> redisTemplate;
