@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtSecurityFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
     private final UserDetailService userDetailService;
 
-    public JwtFilter(JwtUtils jwtUtils, UserDetailService userDetailService) {
+    public JwtSecurityFilter(JwtUtils jwtUtils, UserDetailService userDetailService) {
         this.jwtUtils = jwtUtils;
         this.userDetailService = userDetailService;
     }
@@ -36,7 +36,6 @@ public class JwtFilter extends OncePerRequestFilter {
         var jwtStr = authHeader.substring(7);
         if (jwtStr.isBlank()) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            filterChain.doFilter(request, response);
             return;
         }
 
@@ -47,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             var authToken = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),
-                    userDetails.getPassword(),
+                    userClaims,
                     userDetails.getAuthorities());
 
             if (ctx.getAuthentication() == null) {
@@ -55,9 +54,9 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception ex) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-        } finally {
-            filterChain.doFilter(request, response);
+            return;
         }
 
+        filterChain.doFilter(request, response);
     }
 }

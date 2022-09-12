@@ -8,8 +8,7 @@ import dev.mgbarbosa.urlshortner.entities.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.UUID;
 
 @Component
@@ -30,11 +29,13 @@ public class JwtUtils {
         return JWT.create()
                 .withSubject(user.getEmail())
                 .withAudience(audience)
-                .withIssuedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC))
-                .withExpiresAt(LocalDateTime.now().plusSeconds(expirationTime).toInstant(ZoneOffset.UTC))
+                .withIssuer(issuer)
+                .withIssuedAt(Instant.now())
+                .withExpiresAt(Instant.now().plusSeconds(expirationTime))
                 .withJWTId(UUID.randomUUID().toString())
                 .withClaim("userId", user.getId())
                 .withClaim("name", user.getName())
+                .withClaim("email", user.getEmail())
                 .withClaim("username", user.getUsername())
                 .sign(getAlgorithm());
     }
@@ -46,7 +47,7 @@ public class JwtUtils {
                 .withClaimPresence("email")
                 .withClaimPresence("name")
                 .withClaimPresence("username")
-                .withClaimPresence("id")
+                .withClaimPresence("userId")
                 .build();
 
         var decoded = verifier.verify(jwt);
@@ -54,7 +55,7 @@ public class JwtUtils {
                 decoded.getClaim("email").asString(),
                 decoded.getClaim("name").asString(),
                 decoded.getClaim("username").asString(),
-                decoded.getClaim("id").asString());
+                decoded.getClaim("userId").asString());
     }
 
 

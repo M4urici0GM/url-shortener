@@ -21,7 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @PostMapping
     ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto request) throws EntityExists, URISyntaxException {
         var user = userService.createUser(request);

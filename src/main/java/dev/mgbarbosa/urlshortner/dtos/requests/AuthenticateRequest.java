@@ -19,4 +19,5 @@ public class AuthenticateRequest {
     @Getter
     @Setter
     private String password;
+
 }

@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 public class SecurityConfiguration {
 
-    private final JwtFilter jwtFilter;
+    private final JwtSecurityFilter jwtSecurityFilter;
     private final UserDetailService userDetailService;
 
-    public SecurityConfiguration(JwtFilter jwtFilter, UserDetailService userDetailService) {
-        this.jwtFilter = jwtFilter;
+    public SecurityConfiguration(JwtSecurityFilter jwtSecurityFilter, UserDetailService userDetailService) {
+        this.jwtSecurityFilter = jwtSecurityFilter;
         this.userDetailService = userDetailService;
     }
 
@@ -29,11 +29,11 @@ public class SecurityConfiguration {
             .and().authorizeHttpRequests()
             .antMatchers("/api/v*/auth/**").permitAll()
             .antMatchers(HttpMethod.POST, "/api/v*/shortener").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v*/shortener/**").permitAll()
             .antMatchers(HttpMethod.POST, "/api/v*/user").permitAll()
             .antMatchers( "/api/v*/user").hasRole("ADMIN")
             .antMatchers("/api/v*/**").authenticated()
             .and()
-            .userDetailsService(userDetailService)
             .exceptionHandling()
             .authenticationEntryPoint((request, response, authException) -> {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
@@ -43,7 +43,7 @@ public class SecurityConfiguration {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         return http
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

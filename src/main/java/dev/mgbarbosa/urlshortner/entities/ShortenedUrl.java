@@ -24,6 +24,10 @@ public class ShortenedUrl implements Serializable {
     private String shortenedVersion;
 
     @Getter
+    @Setter
+    private boolean isPublic;
+
+    @Getter
     private String userId;
 
     @Getter
@@ -33,10 +37,11 @@ public class ShortenedUrl implements Serializable {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ShortenedUrl(String userId, String original, String shortedVersion) {
+    public ShortenedUrl(String original, String shortedVersion, String userId, boolean isPublic) {
         this();
         this.userId = userId;
         this.originalVersion = original;
         this.shortenedVersion = shortedVersion;
+        this.isPublic = isPublic;
     }
 }

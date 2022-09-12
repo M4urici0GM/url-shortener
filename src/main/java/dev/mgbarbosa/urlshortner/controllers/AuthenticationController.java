@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 public class AuthenticationController {
-
     private final AuthenticationService authenticationService;
 
     public AuthenticationController(AuthenticationService authenticationService) {

@@ -9,7 +9,6 @@ import javax.validation.constraints.NotEmpty;
 
 @AllArgsConstructor
 public class PaginatedRequest {
-
     @Getter
     @Setter
     @Min(0)

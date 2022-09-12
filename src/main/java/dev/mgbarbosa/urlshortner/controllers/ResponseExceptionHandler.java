@@ -51,7 +51,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(EntityExists.class)
     ResponseEntity<Object> entityExistsHandler(EntityExists ex) {
-        var apiError = new ApiError(HttpStatus.CONFLICT, ex.getMessage());
+        var apiError = new ApiError<>(HttpStatus.CONFLICT, ex.getMessage());
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
 
@@ -59,7 +59,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidCredentialsException.class)
     ResponseEntity<Object> invalidCredentials(InvalidCredentialsException ex) {
-        var apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        var apiError = new ApiError<>(HttpStatus.UNAUTHORIZED, ex.getMessage());
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
 
@@ -67,7 +67,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Throwable.class)
     ResponseEntity<Object> genericExceptionHandler(Throwable ex) {
-        var apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex);
+        var apiError = new ApiError<>(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex);
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
 }

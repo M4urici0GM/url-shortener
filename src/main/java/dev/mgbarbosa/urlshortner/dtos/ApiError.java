@@ -49,12 +49,6 @@ public class ApiError<T> {
         this.errors = errors;
     }
 
-    public ApiError(HttpStatus httpStatus, Throwable throwable) {
-        this(httpStatus);
-        this.message = "Unexpected Error";
-        this.debugMessage = throwable.getLocalizedMessage();
-    }
-
     public ApiError(HttpStatus httpStatus, String message, Throwable throwable) {
         this(httpStatus);
         this.message = message;
