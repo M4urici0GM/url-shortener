@@ -1,0 +1,67 @@
+package dev.mgbarbosa.urlshortner.services;
+
+import dev.mgbarbosa.urlshortner.dtos.PaginatedRequest;
+import dev.mgbarbosa.urlshortner.dtos.PaginatedResponse;
+import dev.mgbarbosa.urlshortner.dtos.UserDto;
+import dev.mgbarbosa.urlshortner.entities.User;
+import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
+import dev.mgbarbosa.urlshortner.repositories.UserRepository;
+import dev.mgbarbosa.urlshortner.services.interfaces.PagingUtils;
+import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
+import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserServiceImpl implements UserService {
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    SecurityService securityService;
+
+    @Autowired
+    PagingUtils pagingUtils;
+
+    @Override
+    public PaginatedResponse<UserDto> getUsers(PaginatedRequest request) {
+        var sort = pagingUtils.parseSorting(request.getSortBy());
+        var pageRequest = PageRequest.of(request.getOffset(), request.getPageSize(), sort);
+        var users = userRepository
+                .findAll(pageRequest)
+                .toList()
+                .stream()
+                .map(UserDto::new)
+                .toList();
+
+        return new PaginatedResponse<>(
+                request.getOffset(),
+                request.getPageSize(),
+                users);
+    }
+
+    @Override
+    public UserDto createUser(UserDto user) throws EntityExists {
+        if (userExists(user.getEmail()) || userExistsByUsername(user.getUsername())) {
+            throw new EntityExists("user", user.getEmail());
+        }
+
+        var passwordHash = securityService.hashPassword(user.getPassword());
+        var createdUser = userRepository.save(new User(
+                user.getName(),
+                user.getEmail(),
+                user.getUsername(),
+                passwordHash));
+
+        return new UserDto(createdUser);
+    }
+
+    boolean userExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    boolean userExistsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+}
