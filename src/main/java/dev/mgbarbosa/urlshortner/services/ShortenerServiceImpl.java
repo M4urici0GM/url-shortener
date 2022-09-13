@@ -1,11 +1,15 @@
 package dev.mgbarbosa.urlshortner.services;
 
+import dev.failsafe.Failsafe;
+import dev.failsafe.RetryPolicy;
 import dev.mgbarbosa.urlshortner.dtos.ShortenedUrlDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.CachingShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
-import dev.mgbarbosa.urlshortner.security.UserClaims;
+import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
+import dev.mgbarbosa.urlshortner.security.AuthenticationToken;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,34 +22,65 @@ import java.util.Random;
 @Service
 public class ShortenerServiceImpl implements ShortenerService {
     private final ShortedUrlRepository shortedUrlRepository;
+    private final CachingShortedUrlRepository cachingShortedUrlRepository;
 
-    public ShortenerServiceImpl(ShortedUrlRepository shortedUrlRepository) {
+    public ShortenerServiceImpl(
+            ShortedUrlRepository shortedUrlRepository,
+            CachingShortedUrlRepository cachingShortedUrlRepository) {
         this.shortedUrlRepository = shortedUrlRepository;
+        this.cachingShortedUrlRepository = cachingShortedUrlRepository;
     }
 
+    /**
+     * Tries to create new shortenedUrl
+     * @param request
+     * @return
+     */
     @Override
     public ShortenedUrlDto createShortUrl(CreateShortUrlRequest request) {
         var maybeClaims = getAuthenticatedUserId();
-        var userId = maybeClaims.orElse(new UserClaims()).getId();
+        var userId = maybeClaims.orElse(new AuthenticatedUserDetails()).getId();
         var randomStr = generateRandomString(10);
 
-        while (shortedUrlRepository.existsByShortenedVersion(randomStr)) {
-            randomStr = generateRandomString(10);
-        }
+        var retryPolicy = RetryPolicy.builder()
+                .handle(RuntimeException.class)
+                .withMaxRetries(3)
+                .build();
+
+        Failsafe.with(retryPolicy)
+                .run(() -> {
+                    if (shortedUrlRepository.existsByShortenedVersion(randomStr))
+                        throw new RuntimeException("RandomStr already exists on the database.");
+                });
+
 
         var newShortenedUrl = new ShortenedUrl(request.getUrl(), randomStr, userId, !maybeClaims.isPresent());
         var createdEntity = shortedUrlRepository.save(newShortenedUrl);
         return new ShortenedUrlDto(createdEntity);
     }
 
+    /**
+     * Tries to find ShortenedUrl based on specified id.
+     *
+     * @param urlId the shortenedUrl to be found.
+     * @return the found item
+     * @throws EntityNotFoundException if entity is not present on the database.
+     */
     @Override
     public ShortenedUrlDto findShortUrlBy(String urlId) {
-        var maybeShortenedUrl = shortedUrlRepository.findByShortenedVersion(urlId);
+        var maybeCached = cachingShortedUrlRepository.findByShortVersion(urlId);
+        if (maybeCached.isPresent())
+            return new ShortenedUrlDto(maybeCached.get());
+
+        var maybeShortenedUrl = shortedUrlRepository.findByShortVersion(urlId);
         if (!maybeShortenedUrl.isPresent()) {
             throw new EntityNotFoundException("", "");
         }
 
+
         var shortenedUrl = maybeShortenedUrl.get();
+        cachingShortedUrlRepository.saveByShortVersion(shortenedUrl);
+
         return new ShortenedUrlDto(shortenedUrl);
     }
 
@@ -72,14 +107,18 @@ public class ShortenerServiceImpl implements ShortenerService {
         return finalString.toString();
     }
 
-    Optional<UserClaims> getAuthenticatedUserId() {
+    Optional<AuthenticatedUserDetails> getAuthenticatedUserId() {
         var ctx = SecurityContextHolder.getContext();
         if (ctx.getAuthentication() instanceof AnonymousAuthenticationToken) {
             return Optional.empty();
         }
 
+        if (ctx.getAuthentication() instanceof AuthenticationToken) {
+            return Optional.of((AuthenticatedUserDetails) ctx.getAuthentication().getPrincipal());
+        }
+
         if (ctx.getAuthentication() instanceof UsernamePasswordAuthenticationToken) {
-            return Optional.of((UserClaims) ctx.getAuthentication().getCredentials());
+            return Optional.of((AuthenticatedUserDetails) ctx.getAuthentication().getPrincipal());
         }
 
         return Optional.empty();

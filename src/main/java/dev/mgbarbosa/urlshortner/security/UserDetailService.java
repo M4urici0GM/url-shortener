@@ -1,15 +1,11 @@
 package dev.mgbarbosa.urlshortner.security;
 
 import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 @Component
-public class UserDetailService implements UserDetailsService {
+public class UserDetailService implements CustomUserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -17,18 +13,13 @@ public class UserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public AuthenticatedUserDetails getUserByUsername(String username) {
         var maybeUser = userRepository.findByUsername(username);
         if (maybeUser.isEmpty()) {
             throw new UsernameNotFoundException("Could not find username " + username);
         }
 
-        var user = maybeUser.get();
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPasswordHash(),
-                new ArrayList<>());
+        return new AuthenticatedUserDetails(maybeUser.get());
     }
 }

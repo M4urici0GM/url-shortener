@@ -5,6 +5,7 @@ import dev.mgbarbosa.urlshortner.dtos.PaginatedResponse;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
 import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

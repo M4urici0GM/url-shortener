@@ -15,9 +15,9 @@ import java.io.IOException;
 public class JwtSecurityFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final UserDetailService userDetailService;
+    private final CustomUserDetailsService userDetailService;
 
-    public JwtSecurityFilter(JwtUtils jwtUtils, UserDetailService userDetailService) {
+    public JwtSecurityFilter(JwtUtils jwtUtils, CustomUserDetailsService userDetailService) {
         this.jwtUtils = jwtUtils;
         this.userDetailService = userDetailService;
     }
@@ -50,12 +50,9 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
         try {
             var ctx = SecurityContextHolder.getContext();
             var userClaims = jwtUtils.extractUserClaims(jwtStr);
-            var userDetails = userDetailService.loadUserByUsername(userClaims.getUsername());
+            var userDetails = userDetailService.getUserByUsername(userClaims.getUsername());
 
-            var authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails.getUsername(),
-                    userClaims,
-                    userDetails.getAuthorities());
+            var authToken = new AuthenticationToken(userDetails);
 
             if (ctx.getAuthentication() == null) {
                 ctx.setAuthentication(authToken);

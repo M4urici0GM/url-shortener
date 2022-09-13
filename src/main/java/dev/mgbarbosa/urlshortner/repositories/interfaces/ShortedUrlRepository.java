@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ShortedUrlRepository extends PagingAndSortingRepository<ShortenedUrl, String> {
     boolean existsByShortenedVersion(String shortenedVersion);
-    Optional<ShortenedUrl> findByShortenedVersion(String shortenedVersion);
+    Optional<ShortenedUrl> findByShortVersion(String shortenedVersion);
 }

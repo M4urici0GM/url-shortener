@@ -8,41 +8,34 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CachingShortedUrlRepositoryImpl implements CachingShortedUrlRepository {
+public class CachingShortedUrlRepositoryImpl
+            extends BaseCachingRepository<String, ShortenedUrl>
+            implements CachingShortedUrlRepository {
 
     private final RedisTemplate<String, ShortenedUrl> cache;
 
     public CachingShortedUrlRepositoryImpl(RedisTemplate<String, ShortenedUrl> cache) {
+        super(cache);
         this.cache = cache;
     }
 
     @Override
     public Optional<ShortenedUrl> findById(String id) {
-        try {
-            var cacheValue = cache.opsForValue().get(id);
-            return Optional.of(cacheValue);
-        } catch (Exception ex) {
-            return Optional.empty();
-        }
+        return this.findByKey(id);
     }
 
     @Override
     public Optional<ShortenedUrl> findByShortVersion(String id) {
-        return Optional.empty();
+        return this.findByKey(id);
     }
 
     @Override
     public boolean saveById(ShortenedUrl shortenedUrl) {
-        try {
-            cache.opsForValue().set(shortenedUrl.getId(), shortenedUrl);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
+        return this.saveByKey(shortenedUrl.getId(), shortenedUrl);
     }
 
     @Override
     public boolean saveByShortVersion(ShortenedUrl shortenedUrl) {
-        return false;
+        return this.saveByKey(shortenedUrl.getShortenedVersion(), shortenedUrl);
     }
 }

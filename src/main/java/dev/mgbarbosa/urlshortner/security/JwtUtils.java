@@ -40,7 +40,7 @@ public class JwtUtils {
                 .sign(getAlgorithm());
     }
 
-    public UserClaims extractUserClaims(String jwt) throws JWTVerificationException {
+    public AuthenticatedUserDetails extractUserClaims(String jwt) throws JWTVerificationException {
         var verifier = JWT.require(getAlgorithm())
                 .withAudience(audience)
                 .withIssuer(issuer)
@@ -51,7 +51,7 @@ public class JwtUtils {
                 .build();
 
         var decoded = verifier.verify(jwt);
-        return new UserClaims(
+        return new AuthenticatedUserDetails(
                 decoded.getClaim("email").asString(),
                 decoded.getClaim("name").asString(),
                 decoded.getClaim("username").asString(),
