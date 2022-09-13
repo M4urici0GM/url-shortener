@@ -8,20 +8,17 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @AllArgsConstructor
+@Getter
+@Setter
 public class PaginatedRequest {
-    @Getter
-    @Setter
     @Min(0)
     int offset;
 
-    @Getter
-    @Setter
-    int pageSize;
-
-    @Getter
-    @Setter
     @NotEmpty
     String sortBy;
+
+    @Min(0)
+    int pageSize;
 
     public PaginatedRequest() {
         this.offset = 0;

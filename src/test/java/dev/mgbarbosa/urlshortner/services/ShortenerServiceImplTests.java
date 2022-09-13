@@ -17,6 +17,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,7 +40,7 @@ public class ShortenerServiceImplTests {
 
     @Test(expected = RuntimeException.class)
     @DisplayName("Should throw exception if max retries")
-    public void shouldThrowExceptionIfRetryLimitReached() {
+    public void shouldThrowExceptionIfRetryLimitReached() throws AccessDeniedException {
         // Arrange
         var request = new CreateShortUrlRequest();
 
@@ -53,7 +54,7 @@ public class ShortenerServiceImplTests {
 
     @Test
     @DisplayName("Should create url as public if user is not logged-in")
-    public void shouldCreatePublicShortenedUrl() {
+    public void shouldCreatePublicShortenedUrl() throws AccessDeniedException {
         // Arrange
 
         var request = new CreateShortUrlRequest("https://github.com/m4urici0gm");
@@ -76,7 +77,7 @@ public class ShortenerServiceImplTests {
 
     @Test
     @DisplayName("Should create url as not public if user is logged-in")
-    public void shouldCreatePrivateShortenedUrl() {
+    public void shouldCreatePrivateShortenedUrl() throws AccessDeniedException {
         // Arrange
         var request = new CreateShortUrlRequest("https://github.com/m4urici0gm");
         var faker = new Faker();

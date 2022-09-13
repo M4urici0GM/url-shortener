@@ -5,6 +5,8 @@ import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,6 +14,7 @@ import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping(path = "/api/v1/shortener")
+@PreAuthorize("permitAll()")
 public class ShortenerController {
     private final ShortenerService shortenerService;
 
@@ -21,7 +24,7 @@ public class ShortenerController {
 
     @PostMapping
     @ResponseBody
-    public ShortenedUrlDto shortUrl(@Valid @RequestBody CreateShortUrlRequest request) {
+    public ShortenedUrlDto shortUrl(@Valid @RequestBody CreateShortUrlRequest request) throws AccessDeniedException {
         return shortenerService.createShortUrl(request);
     }
 

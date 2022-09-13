@@ -19,10 +19,10 @@ public class ShortenedUrlDto {
     @Getter
     private LocalDateTime createdAt;
 
-    @Getter
-    @Setter
     @NotEmpty
     @URL
+    @Getter
+    @Setter
     private String originalUrl;
 
     @Getter

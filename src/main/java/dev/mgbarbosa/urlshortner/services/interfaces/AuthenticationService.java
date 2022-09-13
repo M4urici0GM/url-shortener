@@ -5,10 +5,23 @@ import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequestDto;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 
 import javax.management.InvalidApplicationException;
-import java.util.Optional;
 
 public interface AuthenticationService {
+    /**
+     * Checks whether user is authenticated or not.
+     */
     boolean isAuthenticated();
+
+    /**
+     * Gets authenticated user details from SecurityContext.
+     */
     AuthenticatedUserDetails getAuthenticatedUser();
+
+    /**
+     * Tries to authenticate user with username/password.
+     * @param request Authenticate request containing user credentials.
+     * @return AuthenticatedResponseDto containing user details and jwt token.
+     * @throws InvalidApplicationException throws if jwt creation fails.
+     */
     AuthenticateResponseDto authenticateUser(AuthenticateRequestDto request) throws InvalidApplicationException;
 }

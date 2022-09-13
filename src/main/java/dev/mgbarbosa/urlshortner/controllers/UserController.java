@@ -7,6 +7,7 @@ import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,12 +26,14 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto request) throws EntityExists, URISyntaxException {
         var user = userService.createUser(request);
         return ResponseEntity.created(new URI("")).body(user);
     }
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     ResponseEntity<PaginatedResponse<UserDto>> findAll(@Valid PaginatedRequest request) {
         var users = userService.getUsers(request);
         return ResponseEntity.ok().body(users);

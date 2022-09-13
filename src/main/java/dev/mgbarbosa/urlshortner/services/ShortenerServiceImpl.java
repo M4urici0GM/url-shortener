@@ -11,6 +11,7 @@ import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class ShortenerServiceImpl implements ShortenerService {
      * @return
      */
     @Override
-    public ShortenedUrlDto createShortUrl(CreateShortUrlRequest request) {
+    public ShortenedUrlDto createShortUrl(CreateShortUrlRequest request) throws AccessDeniedException {
         var maybeClaims = getAuthenticatedUserId();
         var userId = maybeClaims.orElse(new AuthenticatedUserDetails()).getId();
         var randomStr = new AtomicReference<>(generateRandomString(10));
@@ -62,7 +63,7 @@ public class ShortenerServiceImpl implements ShortenerService {
         return new ShortenedUrlDto(createdEntity);
     }
 
-    private Optional<AuthenticatedUserDetails> getAuthenticatedUserId() {
+    private Optional<AuthenticatedUserDetails> getAuthenticatedUserId() throws AccessDeniedException {
         if (!authenticationService.isAuthenticated()) {
             return Optional.empty();
         }

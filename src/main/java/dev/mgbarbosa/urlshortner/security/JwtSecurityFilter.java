@@ -2,6 +2,9 @@ package dev.mgbarbosa.urlshortner.security;
 
 import dev.mgbarbosa.urlshortner.services.interfaces.CustomUserDetailsService;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

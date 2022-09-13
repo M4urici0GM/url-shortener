@@ -1,10 +1,8 @@
-package dev.mgbarbosa.urlshortner.security;
+package dev.mgbarbosa.urlshortner.config;
 
-import dev.mgbarbosa.urlshortner.services.UserDetailServiceImpl;
-import dev.mgbarbosa.urlshortner.services.interfaces.CustomUserDetailsService;
+import dev.mgbarbosa.urlshortner.security.JwtSecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,13 +29,6 @@ public class SecurityConfiguration {
         http.csrf().disable()
             .httpBasic().disable()
             .cors()
-            .and().authorizeHttpRequests()
-            .antMatchers("/api/v*/auth/**").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/v*/shortener").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v*/shortener/**").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/v*/user").permitAll()
-            .antMatchers( "/api/v*/user").hasRole("ADMIN")
-            .antMatchers("/api/v*/**").authenticated()
             .and()
             .exceptionHandling()
             .authenticationEntryPoint((request, response, authException) -> {

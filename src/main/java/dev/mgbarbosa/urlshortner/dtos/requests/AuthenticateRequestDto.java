@@ -9,15 +9,13 @@ import javax.validation.constraints.NotEmpty;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class AuthenticateRequestDto {
     @NotEmpty(message = "Username is required.")
-    @Getter
-    @Setter
     private String username;
 
     @NotEmpty(message = "Password is required.")
-    @Getter
-    @Setter
     private String password;
 
 }

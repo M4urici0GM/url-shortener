@@ -6,12 +6,14 @@ import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequestDto;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.InvalidApplicationException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.AccessDeniedException;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")
@@ -29,15 +31,21 @@ public class AuthenticationController {
      * @return returns object containing userDetails + jwtToken
      */
     @PostMapping
-    public ResponseEntity<AuthenticateResponseDto> authenticateUser(
-            @Valid @RequestBody AuthenticateRequestDto request) throws URISyntaxException, InvalidApplicationException {
-
+    public ResponseEntity<AuthenticateResponseDto> authenticateUser(@Valid @RequestBody AuthenticateRequestDto request)
+            throws
+            URISyntaxException,
+            InvalidApplicationException,
+            AccessDeniedException {
         var result = authenticationService.authenticateUser(request);
         return ResponseEntity.created(new URI("")).body(result);
     }
 
+    /**
+     * Get user profile, containing user details + profile info, such as roles.
+     */
     @GetMapping("/profile")
-    ResponseEntity<AuthenticatedUserDetails> getProfile() {
+    @PreAuthorize("isAuthenticated()")
+    ResponseEntity<AuthenticatedUserDetails> getProfile() throws AccessDeniedException {
         var user = authenticationService.getAuthenticatedUser();
         return ResponseEntity
                 .ok()

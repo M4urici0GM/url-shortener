@@ -10,10 +10,9 @@ import javax.validation.constraints.NotEmpty;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class CreateShortUrlRequest {
-
-    @Getter
-    @Setter
     @NotEmpty(message = "url is required for shortening.")
     @URL(message = "url should be a valid url.")
     private String url;
