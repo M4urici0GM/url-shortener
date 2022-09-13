@@ -11,8 +11,6 @@ import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.security.AuthenticationToken;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +70,7 @@ public class ShortenerServiceImpl implements ShortenerService {
         if (maybeCached.isPresent())
             return new ShortenedUrlDto(maybeCached.get());
 
-        var maybeShortenedUrl = shortedUrlRepository.findByShortVersion(urlId);
+        var maybeShortenedUrl = shortedUrlRepository.findByShortenedVersion(urlId);
         if (!maybeShortenedUrl.isPresent()) {
             throw new EntityNotFoundException("", "");
         }
@@ -109,15 +107,7 @@ public class ShortenerServiceImpl implements ShortenerService {
 
     Optional<AuthenticatedUserDetails> getAuthenticatedUserId() {
         var ctx = SecurityContextHolder.getContext();
-        if (ctx.getAuthentication() instanceof AnonymousAuthenticationToken) {
-            return Optional.empty();
-        }
-
         if (ctx.getAuthentication() instanceof AuthenticationToken) {
-            return Optional.of((AuthenticatedUserDetails) ctx.getAuthentication().getPrincipal());
-        }
-
-        if (ctx.getAuthentication() instanceof UsernamePasswordAuthenticationToken) {
             return Optional.of((AuthenticatedUserDetails) ctx.getAuthentication().getPrincipal());
         }
 

@@ -3,15 +3,15 @@ package dev.mgbarbosa.urlshortner.services;
 import dev.mgbarbosa.urlshortner.annotations.WithUserMock;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
+import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.CachingShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,6 +43,48 @@ public class ShortenerServiceImplTests {
 
         // Act
         shortenerService.createShortUrl(request);
+
+    }
+
+    @Test
+    @WithUserMock(id = "6320299bf86defddbabc9ea8")
+    @DisplayName("Should create url as not public if user is logged-in")
+    public void shouldCreatePublicShortenedUrl() {
+        // Arrange
+        var request = new CreateShortUrlRequest("https://github.com/m4urici0gm");
+
+        Mockito.when(shortedUrlRepository.save(ArgumentMatchers.any(ShortenedUrl.class)))
+                .thenAnswer((Answer<ShortenedUrl>) invocationOnMock -> invocationOnMock.getArgument(0));
+
+        // Act
+        var result = shortenerService.createShortUrl(request);
+
+        // Assert
+        assert result.getOriginalUrl() == request.getUrl();
+
+        Mockito.verify(shortedUrlRepository, Mockito.times(1))
+                .save(ArgumentMatchers.argThat(shortenedUrl -> {
+                    return !shortenedUrl.isPublic() && shortenedUrl.getUserId().equals("6320299bf86defddbabc9ea8");
+                }));
+    }
+
+    @Test
+    @DisplayName("Should create url as not public if user is logged-in")
+    public void shouldCreatePrivateShortenedUrl() {
+        // Arrange
+        var request = new CreateShortUrlRequest("https://github.com/m4urici0gm");
+
+        Mockito.when(shortedUrlRepository.save(ArgumentMatchers.any(ShortenedUrl.class)))
+                .thenAnswer((Answer<ShortenedUrl>) invocationOnMock -> invocationOnMock.getArgument(0));
+
+        // Act
+        var result = shortenerService.createShortUrl(request);
+
+        // Assert
+        assert result.getOriginalUrl() == request.getUrl();
+
+        Mockito.verify(shortedUrlRepository, Mockito.times(1))
+                .save(ArgumentMatchers.argThat(ShortenedUrl::isPublic));
     }
 
     @Test
@@ -61,7 +103,22 @@ public class ShortenerServiceImplTests {
 
         // Assert
         Mockito.verify(shortedUrlRepository, Mockito.times(0))
-                .findByShortVersion(ArgumentMatchers.any());
+                .findByShortenedVersion(ArgumentMatchers.any());
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    @WithUserMock()
+    @DisplayName("Should return from cache")
+    public void shouldThrowIfShortenedUrlNotFound() {
+        // Arrange
+        var randomId = "abCd";
+        var expectedObj = new ShortenedUrl("https://google.com", randomId, "632020a9d379c96722cefee3", false);
+
+        Mockito.when(cachingShortedUrlRepository.findByShortVersion(ArgumentMatchers.eq(randomId)))
+                .thenReturn(Optional.empty());
+
+        // Act
+        shortenerService.findShortUrlBy(randomId);
     }
 
     @Test
@@ -72,7 +129,7 @@ public class ShortenerServiceImplTests {
         var randomId = "abCd";
         var expectedObj = new ShortenedUrl("https://google.com", randomId, "632020a9d379c96722cefee3", false);
 
-        Mockito.when(shortedUrlRepository.findByShortVersion(ArgumentMatchers.eq(randomId)))
+        Mockito.when(shortedUrlRepository.findByShortenedVersion(ArgumentMatchers.eq(randomId)))
                 .thenReturn(Optional.of(expectedObj));
 
         // Act
@@ -80,29 +137,9 @@ public class ShortenerServiceImplTests {
 
         // Assert
         Mockito.verify(shortedUrlRepository, Mockito.times(1))
-                .findByShortVersion(ArgumentMatchers.any());
+                .findByShortenedVersion(ArgumentMatchers.any());
 
-        Mockito.verify(cachingShortedUrlRepository, Mockito.times(0))
+        Mockito.verify(cachingShortedUrlRepository, Mockito.times(1))
                 .findByShortVersion(ArgumentMatchers.any());
     }
-
-
-//    @Test(expected = RuntimeException.class)
-//    @WithUserMock(id = "632020a9d379c96722cefee3")
-//    @DisplayName("Should return from cache")
-//    public void shouldReturnFromCacheCorrectly2() {
-//        // Arrange
-//        var request = new CreateShortUrlRequest("https://google.com");
-//
-//        Mockito.when(shortedUrlRepository.save(ArgumentMatchers.any(ShortenedUrl.class)))
-//                .thenAnswer(new Answer<ShortenedUrl>() {
-//                    @Override
-//                    public ShortenedUrl answer(InvocationOnMock invocationOnMock) throws Throwable {
-//                        return invocationOnMock.getArgument(0);
-//                    }
-//                });
-//
-//        // Act
-//        var result = shortenerService.createShortUrl(request);
-//    }
 }
