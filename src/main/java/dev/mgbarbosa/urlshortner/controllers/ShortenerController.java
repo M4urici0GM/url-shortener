@@ -15,7 +15,6 @@ import javax.websocket.server.PathParam;
 public class ShortenerController {
     private final ShortenerService shortenerService;
 
-    @Autowired
     public ShortenerController(ShortenerService shortenerService) {
         this.shortenerService = shortenerService;
     }

@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 public class AuthenticationToken extends AbstractAuthenticationToken {
-
     private AuthenticatedUserDetails principal;
 
     public AuthenticationToken() {

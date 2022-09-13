@@ -1,6 +1,7 @@
 package dev.mgbarbosa.urlshortner.security;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import dev.mgbarbosa.urlshortner.services.interfaces.CustomUserDetailsService;
+import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,12 +14,11 @@ import java.io.IOException;
 
 @Component
 public class JwtSecurityFilter extends OncePerRequestFilter {
-
-    private final JwtUtils jwtUtils;
+    private final SecurityService securityService;
     private final CustomUserDetailsService userDetailService;
 
-    public JwtSecurityFilter(JwtUtils jwtUtils, CustomUserDetailsService userDetailService) {
-        this.jwtUtils = jwtUtils;
+    public JwtSecurityFilter(SecurityService jwtUtils, CustomUserDetailsService userDetailService) {
+        this.securityService = jwtUtils;
         this.userDetailService = userDetailService;
     }
 
@@ -49,7 +49,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
         try {
             var ctx = SecurityContextHolder.getContext();
-            var userClaims = jwtUtils.extractUserClaims(jwtStr);
+            var userClaims = securityService.extractUserClaims(jwtStr);
             var userDetails = userDetailService.getUserByUsername(userClaims.getUsername());
 
             var authToken = new AuthenticationToken(userDetails);

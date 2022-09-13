@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.management.InvalidApplicationException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,7 +30,7 @@ public class AuthenticationController {
      */
     @PostMapping
     public ResponseEntity<AuthenticatedUserDto> authenticateUser(
-            @Valid @RequestBody AuthenticateRequest request) throws URISyntaxException {
+            @Valid @RequestBody AuthenticateRequest request) throws URISyntaxException, InvalidApplicationException {
 
         var result = authenticationService.authenticateUser(request);
         return ResponseEntity.created(new URI("")).body(result);

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class ShortenerServiceImpl implements ShortenerService {
@@ -38,7 +39,7 @@ public class ShortenerServiceImpl implements ShortenerService {
     public ShortenedUrlDto createShortUrl(CreateShortUrlRequest request) {
         var maybeClaims = getAuthenticatedUserId();
         var userId = maybeClaims.orElse(new AuthenticatedUserDetails()).getId();
-        var randomStr = generateRandomString(10);
+        var randomStr = new AtomicReference<>(generateRandomString(10));
 
         var retryPolicy = RetryPolicy.builder()
                 .handle(RuntimeException.class)
@@ -47,12 +48,15 @@ public class ShortenerServiceImpl implements ShortenerService {
 
         Failsafe.with(retryPolicy)
                 .run(() -> {
-                    if (shortedUrlRepository.existsByShortenedVersion(randomStr))
+                    if (shortedUrlRepository.existsByShortenedVersion(randomStr.get()))
+                    {
+                        randomStr.set(generateRandomString(10));
                         throw new RuntimeException("RandomStr already exists on the database.");
+                    }
                 });
 
 
-        var newShortenedUrl = new ShortenedUrl(request.getUrl(), randomStr, userId, !maybeClaims.isPresent());
+        var newShortenedUrl = new ShortenedUrl(request.getUrl(), randomStr.get(), userId, !maybeClaims.isPresent());
         var createdEntity = shortedUrlRepository.save(newShortenedUrl);
         return new ShortenedUrlDto(createdEntity);
     }

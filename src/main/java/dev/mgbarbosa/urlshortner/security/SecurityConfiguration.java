@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 public class SecurityConfiguration {
-
     private final JwtSecurityFilter jwtSecurityFilter;
     private final UserDetailService userDetailService;
 
