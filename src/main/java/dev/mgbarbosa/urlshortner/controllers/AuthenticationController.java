@@ -1,13 +1,12 @@
 package dev.mgbarbosa.urlshortner.controllers;
 
-import dev.mgbarbosa.urlshortner.dtos.AuthenticatedUserDto;
-import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequest;
+import dev.mgbarbosa.urlshortner.dtos.UserDto;
+import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
+import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequestDto;
+import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.management.InvalidApplicationException;
 import javax.validation.Valid;
@@ -25,14 +24,23 @@ public class AuthenticationController {
 
     /**
      * Tries to authenticate user with username and password.
+     *
      * @param request Request containing username and password
      * @return returns object containing userDetails + jwtToken
      */
     @PostMapping
-    public ResponseEntity<AuthenticatedUserDto> authenticateUser(
-            @Valid @RequestBody AuthenticateRequest request) throws URISyntaxException, InvalidApplicationException {
+    public ResponseEntity<AuthenticateResponseDto> authenticateUser(
+            @Valid @RequestBody AuthenticateRequestDto request) throws URISyntaxException, InvalidApplicationException {
 
         var result = authenticationService.authenticateUser(request);
         return ResponseEntity.created(new URI("")).body(result);
+    }
+
+    @GetMapping("/profile")
+    ResponseEntity<AuthenticatedUserDetails> getProfile() {
+        var user = authenticationService.getAuthenticatedUser();
+        return ResponseEntity
+                .ok()
+                .body(user);
     }
 }

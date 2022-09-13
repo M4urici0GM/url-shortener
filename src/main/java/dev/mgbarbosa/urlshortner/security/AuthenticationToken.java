@@ -1,10 +1,13 @@
 package dev.mgbarbosa.urlshortner.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+/**
+ * Represents an Authenticated user's credential.
+ * Used to store user's info to be accessed across the system.
+ */
 public class AuthenticationToken extends AbstractAuthenticationToken {
     private AuthenticatedUserDetails principal;
 

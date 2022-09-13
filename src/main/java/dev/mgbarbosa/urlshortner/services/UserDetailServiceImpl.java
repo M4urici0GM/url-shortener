@@ -1,16 +1,16 @@
-package dev.mgbarbosa.urlshortner.security;
+package dev.mgbarbosa.urlshortner.services;
 
 import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
+import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.CustomUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDetailService implements CustomUserDetailsService {
-
+public class UserDetailServiceImpl implements CustomUserDetailsService {
     private final UserRepository userRepository;
 
-    public UserDetailService(UserRepository userRepository) {
+    public UserDetailServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

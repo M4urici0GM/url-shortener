@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticateRequest {
+public class AuthenticateRequestDto {
     @NotEmpty(message = "Username is required.")
     @Getter
     @Setter

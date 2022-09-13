@@ -5,6 +5,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Optional;
 
+/**
+ * Base implementation for CachingRepository.
+ * @param <Tid>
+ * @param <TEntity>
+ */
 public abstract class BaseCachingRepository<Tid, TEntity> {
     private final RedisTemplate<Tid, TEntity> cache;
 

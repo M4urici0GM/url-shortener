@@ -9,9 +9,8 @@ import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.CachingShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
-import dev.mgbarbosa.urlshortner.security.AuthenticationToken;
+import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,12 +20,14 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class ShortenerServiceImpl implements ShortenerService {
     private final ShortedUrlRepository shortedUrlRepository;
+    private final AuthenticationService authenticationService;
     private final CachingShortedUrlRepository cachingShortedUrlRepository;
 
     public ShortenerServiceImpl(
             ShortedUrlRepository shortedUrlRepository,
-            CachingShortedUrlRepository cachingShortedUrlRepository) {
+            AuthenticationService authenticationService, CachingShortedUrlRepository cachingShortedUrlRepository) {
         this.shortedUrlRepository = shortedUrlRepository;
+        this.authenticationService = authenticationService;
         this.cachingShortedUrlRepository = cachingShortedUrlRepository;
     }
 
@@ -59,6 +60,14 @@ public class ShortenerServiceImpl implements ShortenerService {
         var newShortenedUrl = new ShortenedUrl(request.getUrl(), randomStr.get(), userId, !maybeClaims.isPresent());
         var createdEntity = shortedUrlRepository.save(newShortenedUrl);
         return new ShortenedUrlDto(createdEntity);
+    }
+
+    private Optional<AuthenticatedUserDetails> getAuthenticatedUserId() {
+        if (!authenticationService.isAuthenticated()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(authenticationService.getAuthenticatedUser());
     }
 
     /**
@@ -107,14 +116,5 @@ public class ShortenerServiceImpl implements ShortenerService {
         }
 
         return finalString.toString();
-    }
-
-    Optional<AuthenticatedUserDetails> getAuthenticatedUserId() {
-        var ctx = SecurityContextHolder.getContext();
-        if (ctx.getAuthentication() instanceof AuthenticationToken) {
-            return Optional.of((AuthenticatedUserDetails) ctx.getAuthentication().getPrincipal());
-        }
-
-        return Optional.empty();
     }
 }

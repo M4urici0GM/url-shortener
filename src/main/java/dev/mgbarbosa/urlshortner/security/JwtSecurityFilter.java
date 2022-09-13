@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Responsible for reading, and validating token sent in Authorization Header.
+ */
 @Component
 public class JwtSecurityFilter extends OncePerRequestFilter {
     private final SecurityService securityService;

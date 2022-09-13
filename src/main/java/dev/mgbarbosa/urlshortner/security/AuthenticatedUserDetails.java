@@ -1,5 +1,6 @@
 package dev.mgbarbosa.urlshortner.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.mgbarbosa.urlshortner.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AuthenticatedUserDetails implements UserDetails {
     private String email;
     private String name;

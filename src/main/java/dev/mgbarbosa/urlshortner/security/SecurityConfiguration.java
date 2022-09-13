@@ -1,5 +1,7 @@
 package dev.mgbarbosa.urlshortner.security;
 
+import dev.mgbarbosa.urlshortner.services.UserDetailServiceImpl;
+import dev.mgbarbosa.urlshortner.services.interfaces.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,11 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 public class SecurityConfiguration {
     private final JwtSecurityFilter jwtSecurityFilter;
-    private final UserDetailService userDetailService;
 
-    public SecurityConfiguration(JwtSecurityFilter jwtSecurityFilter, UserDetailService userDetailService) {
+    public SecurityConfiguration(JwtSecurityFilter jwtSecurityFilter) {
         this.jwtSecurityFilter = jwtSecurityFilter;
-        this.userDetailService = userDetailService;
     }
 
     /**
