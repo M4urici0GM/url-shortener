@@ -42,7 +42,7 @@ public class UserServiceTest {
     @DisplayName("Should map User to UserDto correctly.")
     public void shouldMapCorrectlyToUserDto() {
         // Arrange
-        var request = new PaginatedRequest(0, 20, "+id");
+        var request = new PaginatedRequest(0, "+id", 20);
         var sort = Sort.by("id").ascending();
         var pageRequest = PageRequest.of(request.getOffset(), request.getPageSize(), sort);
         var expectedUserList = createUserList(10);

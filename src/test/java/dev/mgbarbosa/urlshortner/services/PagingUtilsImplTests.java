@@ -20,7 +20,7 @@ public class PagingUtilsImplTests {
     @Test
     public void shouldParseCorrectly() {
         // Arrange
-        var paginatedRequest = new PaginatedRequest(0, 20, "+id");
+        var paginatedRequest = new PaginatedRequest(0, "+id", 20);
 
         // Act
         var result = pagingUtils.parseSorting(paginatedRequest.getSortBy());
@@ -32,7 +32,7 @@ public class PagingUtilsImplTests {
     @Test
     public void shouldParseCorrectlyDescending() {
         // Arrange
-        var paginatedRequest = new PaginatedRequest(0, 20, "-id");
+        var paginatedRequest = new PaginatedRequest(0, "-id", 20);
 
         // Act
         var result = pagingUtils.parseSorting(paginatedRequest.getSortBy());
@@ -44,7 +44,7 @@ public class PagingUtilsImplTests {
     @Test
     public void shouldParseCorrectlyIfOrderingNotSpecified() {
         // Arrange
-        var paginatedRequest = new PaginatedRequest(0, 20, "id");
+        var paginatedRequest = new PaginatedRequest(0, "id", 20);
 
         // Act
         var result = pagingUtils.parseSorting(paginatedRequest.getSortBy());

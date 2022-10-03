@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Base Configuration for JWT token creation.
+ */
 @Configuration
 @Getter
 @Setter

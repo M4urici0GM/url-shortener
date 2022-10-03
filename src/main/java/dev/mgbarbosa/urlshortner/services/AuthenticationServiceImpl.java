@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.management.InvalidApplicationException;
+import java.time.Instant;
+import java.util.ArrayList;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -35,20 +37,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             InvalidApplicationException {
 
         var maybeUser = userRepository.findByUsername(request.getUsername());
-        if (!maybeUser.isPresent()) {
-            throw new AccessDeniedException("Username or password invalid");
-        }
+        var user = maybeUser.orElseThrow(() ->  new AccessDeniedException("Username or password invalid"));
 
-        var user = maybeUser.get();
         var isPasswordValid = securityService.verifyPassword(request.getPassword(), user.getPasswordHash());
         if (!isPasswordValid) {
             throw new AccessDeniedException("Username or password invalid");
         }
 
         var generatedJwt = securityService.generateToken(user);
+        var refreshToken = securityService.generateToken(new ArrayList<>(), Instant.now().plusSeconds(3600));
+
         return new AuthenticateResponseDto(
                 new UserDto(user),
-                generatedJwt);
+                generatedJwt,
+                refreshToken);
     }
 
     /**

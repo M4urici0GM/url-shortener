@@ -5,14 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.Instant;
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class AuthenticateResponseDto {
-    @Getter
-    @Setter
     private UserDto userDetails;
-
-    @Getter
-    @Setter
-    private String token;
+    private JwtToken token;
+    private JwtToken refreshToken;
 }
+

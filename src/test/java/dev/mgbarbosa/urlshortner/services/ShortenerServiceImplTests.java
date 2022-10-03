@@ -1,7 +1,6 @@
 package dev.mgbarbosa.urlshortner.services;
 
 import com.github.javafaker.Faker;
-import dev.mgbarbosa.urlshortner.annotations.WithUserMock;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;

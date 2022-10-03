@@ -7,27 +7,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 
 @Document(collection = "users")
+@Getter
+@Setter
 public class User implements Serializable {
 
     @Id
     @Generated
-    @Getter
     private String id;
-
-    @Getter
-    @Setter
     private String name;
-
-    @Getter
-    @Setter
     private String email;
-
-    @Getter
-    @Setter
     private final String username;
-
-    @Getter
-    @Setter
     private String passwordHash;
 
     public User(String name, String email, String username, String passwordHash) {
