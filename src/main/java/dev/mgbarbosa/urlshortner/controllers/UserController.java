@@ -1,7 +1,7 @@
 package dev.mgbarbosa.urlshortner.controllers;
 
-import dev.mgbarbosa.urlshortner.dtos.PaginatedRequest;
-import dev.mgbarbosa.urlshortner.dtos.PaginatedResponse;
+import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
+import dev.mgbarbosa.urlshortner.dtos.responses.PaginatedResponse;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;

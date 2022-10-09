@@ -1,13 +1,13 @@
 package dev.mgbarbosa.urlshortner.factories;
 
+import dev.mgbarbosa.urlshortner.annotations.WithUserMock;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.security.AuthenticationToken;
-import dev.mgbarbosa.urlshortner.annotations.WithUserMock;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-public class SecurityContextMock implements WithSecurityContextFactory<WithUserMock> {
+public class SecurityContextMockFactory implements WithSecurityContextFactory<WithUserMock> {
     @Override
     public SecurityContext createSecurityContext(WithUserMock annotation) {
         var ctx = SecurityContextHolder.createEmptyContext();
@@ -18,6 +18,8 @@ public class SecurityContextMock implements WithSecurityContextFactory<WithUserM
         principal.setEmail(annotation.email());
 
         ctx.setAuthentication(new AuthenticationToken(principal));
+
+        SecurityContextHolder.setContext(ctx);
         return ctx;
     }
 }

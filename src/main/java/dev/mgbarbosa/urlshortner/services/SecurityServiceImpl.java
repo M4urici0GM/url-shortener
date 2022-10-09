@@ -3,7 +3,7 @@ package dev.mgbarbosa.urlshortner.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import dev.mgbarbosa.urlshortner.config.JwtProperties;
-import dev.mgbarbosa.urlshortner.dtos.UserClaim;
+import dev.mgbarbosa.urlshortner.dtos.Claim;
 import dev.mgbarbosa.urlshortner.dtos.responses.JwtToken;
 import dev.mgbarbosa.urlshortner.entities.User;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
@@ -14,12 +14,19 @@ import org.springframework.stereotype.Service;
 import javax.management.InvalidApplicationException;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
 
     private final JwtProperties jwtProperties;
+    private final List<String> privateClaimNames = Stream.of(
+            "jti",
+            "iss",
+            "aud",
+            "exp",
+            "iat").toList();
 
     public SecurityServiceImpl(JwtProperties jwtProperties) {
         this.jwtProperties = jwtProperties;
@@ -56,6 +63,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     /**
      * Creates a token for the specified user.
+     *
      * @param user the user which the token will be issued to.
      * @return the created token
      * @throws InvalidApplicationException internal JWT exception.
@@ -64,10 +72,10 @@ public class SecurityServiceImpl implements SecurityService {
     public JwtToken generateToken(User user) throws InvalidApplicationException {
         var expirationDate = getDefaultJwtExpirationTime();
         var claimList = Stream.of(
-                        new UserClaim("userId", user.getId()),
-                        new UserClaim("name", user.getName()),
-                        new UserClaim("email", user.getEmail()),
-                        new UserClaim("username", user.getUsername())
+                        new Claim("userId", user.getId()),
+                        new Claim("name", user.getName()),
+                        new Claim("email", user.getEmail()),
+                        new Claim("username", user.getUsername())
                 )
                 .toList();
 
@@ -75,33 +83,51 @@ public class SecurityServiceImpl implements SecurityService {
         return generateToken(claimList, expirationDate);
     }
 
+    @Override
+    public JwtToken generateRefreshToken(User user) throws InvalidApplicationException {
+        var expirationSeconds = jwtProperties.getRefreshTokenExpirationTime();
+        var expirationDate = Instant.now().plusSeconds(expirationSeconds);
+        var claimList = Stream.of(
+                new Claim("email", user.getEmail()),
+                new Claim("userId", user.getId()),
+                new Claim("scope", "refresh-token")).toList();
+
+        return generateToken(claimList, expirationDate);
+    }
+
     /**
      * Creates new JwtToken with specified claims
-     *
+     * <p>
      * Note that by default it'll add the following claims:
      * Iss: Time that token was created.
      * Exi: Time that token will be expired.
      * Audience: Who's this token is for.
      * Issuer: Who issued the token (This app)
      *
-     * @param userClaims the claims list to be added to the token
+     * @param claims    the claims list to be added to the token
      * @param expiresAt the time token will be expired.
      * @return the created jwt token
      * @throws InvalidApplicationException internal JWT exception.
      */
     @Override
-    public JwtToken generateToken(List<UserClaim> userClaims, Instant expiresAt) throws InvalidApplicationException {
+    public JwtToken generateToken(List<Claim> claims, Instant expiresAt) {
         var now = Instant.now();
-        var jwt = JWT
+        var tokenIdentifier = UUID.randomUUID();
+
+        var jwtBuilder = JWT
                 .create()
                 .withIssuedAt(Instant.now())
                 .withExpiresAt(expiresAt)
                 .withAudience(jwtProperties.getAudience())
-                .withIssuer(jwtProperties.getIssuer());
+                .withIssuer(jwtProperties.getIssuer())
+                .withClaim("jti", tokenIdentifier.toString());
 
-        userClaims.forEach((claim) -> jwt.withClaim(claim.getName(), claim.getValue()));
+        claims.stream()
+                .filter(x -> !privateClaimNames.contains(x))
+                .forEach((claim) -> jwtBuilder.withClaim(claim.getName(), claim.getValue()));
+
         return new JwtToken(
-                jwt.sign(getAlgorithm()),
+                jwtBuilder.sign(getAlgorithm()),
                 now,
                 expiresAt);
 

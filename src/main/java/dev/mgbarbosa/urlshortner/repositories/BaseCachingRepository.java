@@ -1,23 +1,22 @@
 package dev.mgbarbosa.urlshortner.repositories;
 
-import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Optional;
 
 /**
  * Base implementation for CachingRepository.
- * @param <Tid>
+ * @param <TKey>
  * @param <TEntity>
  */
-public abstract class BaseCachingRepository<Tid, TEntity> {
-    private final RedisTemplate<Tid, TEntity> cache;
+public abstract class BaseCachingRepository<TKey, TEntity> {
+    private final RedisTemplate<TKey, TEntity> cache;
 
-    public BaseCachingRepository(RedisTemplate<Tid, TEntity> cache) {
+    public BaseCachingRepository(RedisTemplate<TKey, TEntity> cache) {
         this.cache = cache;
     }
 
-    public Optional<TEntity> findByKey(Tid key) {
+    public Optional<TEntity> findByKey(TKey key) {
         try {
             var cacheValue = cache.opsForValue().get(key);
             if (cacheValue == null)
@@ -29,7 +28,7 @@ public abstract class BaseCachingRepository<Tid, TEntity> {
         }
     }
 
-    public boolean saveByKey(Tid key, TEntity obj) {
+    public boolean saveByKey(TKey key, TEntity obj) {
         try {
             cache.opsForValue().set(key, obj);
             return true;

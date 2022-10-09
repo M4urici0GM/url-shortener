@@ -1,8 +1,8 @@
 package dev.mgbarbosa.urlshortner.controllers;
 
-import dev.mgbarbosa.urlshortner.dtos.UserDto;
-import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequestDto;
+import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
+import dev.mgbarbosa.urlshortner.exceptios.InvalidOperationException;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +32,7 @@ public class AuthenticationController {
      */
     @PostMapping
     public ResponseEntity<AuthenticateResponseDto> authenticateUser(@Valid @RequestBody AuthenticateRequestDto request)
-            throws
-            URISyntaxException,
-            InvalidApplicationException,
-            AccessDeniedException {
+            throws URISyntaxException, InvalidApplicationException, InvalidOperationException {
         var result = authenticationService.authenticateUser(request);
         return ResponseEntity.created(new URI("")).body(result);
     }

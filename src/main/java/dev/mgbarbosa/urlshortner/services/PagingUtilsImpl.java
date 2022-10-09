@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PagingUtilsImpl implements PagingUtils {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Sort parseSorting(String sortBy) {
         if (!sortBy.contains("+") && !sortBy.contains("-")) {

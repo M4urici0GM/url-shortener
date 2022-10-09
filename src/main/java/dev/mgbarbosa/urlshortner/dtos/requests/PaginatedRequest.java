@@ -1,4 +1,4 @@
-package dev.mgbarbosa.urlshortner.dtos;
+package dev.mgbarbosa.urlshortner.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,13 +10,11 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PaginatedRequest {
+public class  PaginatedRequest {
     @Min(0)
     int offset;
-
     @NotEmpty
     String sortBy;
-
     @Min(0)
     int pageSize;
 

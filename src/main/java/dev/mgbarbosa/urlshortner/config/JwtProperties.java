@@ -28,4 +28,7 @@ public class JwtProperties {
     @Value("${jwt.expiration-seconds}")
     private long expirationTime;
 
+    @Value("${jwt.refresh-expiration-seconds}")
+    private long refreshTokenExpirationTime;
+
 }

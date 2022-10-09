@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-public class PaginatedResponse<T> {
-    int page;
-    int pageSize;
-    List<T> records;
+public class Claim {
+    private String name;
+    private String value;
 }

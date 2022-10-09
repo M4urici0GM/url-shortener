@@ -2,12 +2,10 @@ package dev.mgbarbosa.urlshortner.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import com.github.javafaker.Faker;
 import dev.mgbarbosa.urlshortner.config.JwtProperties;
-import dev.mgbarbosa.urlshortner.dtos.UserClaim;
+import dev.mgbarbosa.urlshortner.dtos.Claim;
 import dev.mgbarbosa.urlshortner.entities.User;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -19,8 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.management.InvalidApplicationException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -172,8 +168,8 @@ public class SecurityServiceImplTests {
 
         var expirationTime = now.plusSeconds(3600);
         var expectedClaims = Stream.of(
-                new UserClaim("CLAIM1", "CLAIM1_VALUE"),
-                new UserClaim("CLAIM2", "CLAIM1_VALUE2")).toList();
+                new Claim("CLAIM1", "CLAIM1_VALUE"),
+                new Claim("CLAIM2", "CLAIM1_VALUE2")).toList();
 
         Mockito.when(jwtProperties.getIssuer()).thenReturn(issuerValue);
         Mockito.when(jwtProperties.getAudience()).thenReturn(audienceValue);
@@ -194,7 +190,7 @@ public class SecurityServiceImplTests {
         assert claims.get("iss").asString().equals(issuerValue);
     }
 
-    private boolean checkClaim(Map<String, Claim> claims, String claimName, String expectedValue) {
+    private boolean checkClaim(Map<String, com.auth0.jwt.interfaces.Claim> claims, String claimName, String expectedValue) {
         var contains = claims.keySet().stream().anyMatch(x -> x.equals(claimName));
         if (!contains)
             return false;

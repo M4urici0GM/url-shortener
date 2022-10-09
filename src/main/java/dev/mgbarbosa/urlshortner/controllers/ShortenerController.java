@@ -3,7 +3,6 @@ package dev.mgbarbosa.urlshortner.controllers;
 import dev.mgbarbosa.urlshortner.dtos.ShortenedUrlDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.services.interfaces.ShortenerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +30,8 @@ public class ShortenerController {
             AccessDeniedException,
             URISyntaxException {
 
-        return ResponseEntity.created(new URI(""))
+        return ResponseEntity
+                .created(new URI(""))
                 .body(shortenerService.createShortUrl(request));
     }
 

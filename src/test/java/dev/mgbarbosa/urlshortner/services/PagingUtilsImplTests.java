@@ -1,6 +1,6 @@
 package dev.mgbarbosa.urlshortner.services;
 
-import dev.mgbarbosa.urlshortner.dtos.PaginatedRequest;
+import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
