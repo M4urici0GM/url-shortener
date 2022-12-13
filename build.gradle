@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'jacoco'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:3.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.0'
+    implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'junit:junit:4.13.2'
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.0.0'
+    implementation 'com.auth0:java-jwt:4.2.1'
+    implementation 'io.lettuce:lettuce-core:6.2.1.RELEASE'
+    implementation 'org.springframework.data:spring-data-redis:3.0.0'
+    implementation 'dev.failsafe:failsafe:3.2.4'
+    implementation 'org.springframework.security:spring-security-core:5.7.3'
+    implementation 'org.springframework.security:spring-security-test:5.7.3'
+    implementation 'org.projectlombok:lombok:1.18.24'
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.0'
+    testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation 'it.ozimov:embedded-redis:0.7.3'
+
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'accessing-data-mongodb'
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

@@ -98,7 +98,7 @@ public class ShortenerServiceImplTests {
         var result = shortenerService.createShortUrl(request);
 
         // Assert
-        assert result.getOriginalUrl() == request.getUrl();
+        assert Objects.equals(result.getOriginalUrl(), request.getUrl());
 
         Mockito.verify(shortedUrlRepository, Mockito.times(1))
                 .save(ArgumentMatchers.argThat(shortenedUrl -> {

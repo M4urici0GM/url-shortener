@@ -12,7 +12,7 @@ public class AuthenticationToken extends AbstractAuthenticationToken {
     private AuthenticatedUserDetails principal;
 
     public AuthenticationToken() {
-        super((Collection) null);
+        super(null);
     }
 
     public AuthenticationToken(AuthenticatedUserDetails userDetails) {
