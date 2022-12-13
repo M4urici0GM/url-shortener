@@ -6,6 +6,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -27,25 +28,23 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
      * Responsible for handling Validation errors.
      */
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
+                                                                  HttpStatusCode status, WebRequest request) {
         var errors = new HashMap<String, String>();
         ex.getBindingResult()
-                .getAllErrors()
-                .forEach(error -> {
-                    var fieldError = (FieldError) error;
-                    var fieldName = fieldError.getField();
-                    var message = fieldError.getDefaultMessage();
+            .getAllErrors()
+            .forEach(error -> {
+                var fieldError = (FieldError) error;
+                var fieldName = fieldError.getField();
+                var message = fieldError.getDefaultMessage();
 
-                    errors.put(fieldName, message);
-                });
+                errors.put(fieldName, message);
+            });
 
         var apiError = new ApiError<>(HttpStatus.BAD_REQUEST, "Validation failed", errors);
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
+
 
     @ResponseBody
     @ResponseStatus(HttpStatus.CONFLICT)

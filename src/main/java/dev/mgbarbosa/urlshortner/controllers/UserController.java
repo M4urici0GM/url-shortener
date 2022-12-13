@@ -1,28 +1,28 @@
 package dev.mgbarbosa.urlshortner.controllers;
 
+import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
 import dev.mgbarbosa.urlshortner.dtos.responses.PaginatedResponse;
-import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
-import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api/v1/user")
 public class UserController {
     private final UserService userService;
-    private final SecurityService securityService;
 
-    public UserController(UserService userService, SecurityService securityService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.securityService = securityService;
     }
 
     @PostMapping

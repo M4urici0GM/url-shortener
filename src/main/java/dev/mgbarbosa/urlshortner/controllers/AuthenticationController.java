@@ -5,12 +5,12 @@ import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
 import dev.mgbarbosa.urlshortner.exceptios.InvalidOperationException;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.InvalidApplicationException;
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.AccessDeniedException;

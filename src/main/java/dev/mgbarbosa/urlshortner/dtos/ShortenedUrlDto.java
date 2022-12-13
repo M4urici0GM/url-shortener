@@ -2,12 +2,12 @@ package dev.mgbarbosa.urlshortner.dtos;
 
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor

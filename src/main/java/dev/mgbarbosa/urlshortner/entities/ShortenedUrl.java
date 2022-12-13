@@ -7,6 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
 @Document(collection = "shortened_urls")
 public class ShortenedUrl implements Serializable {
 
@@ -15,23 +19,11 @@ public class ShortenedUrl implements Serializable {
     @Getter
     private String id;
 
-    @Getter
-    @Setter
     private String originalVersion;
-
-    @Getter
-    @Setter
     private String shortenedVersion;
-
-    @Getter
-    @Setter
     private boolean isPublic;
-
-    @Getter
     private String userId;
-
-    @Getter
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     private ShortenedUrl() {
         this.createdAt = LocalDateTime.now();

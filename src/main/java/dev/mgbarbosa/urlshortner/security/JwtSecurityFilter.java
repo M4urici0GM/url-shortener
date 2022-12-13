@@ -2,6 +2,10 @@ package dev.mgbarbosa.urlshortner.security;
 
 import dev.mgbarbosa.urlshortner.services.interfaces.CustomUserDetailsService;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -9,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 /**
@@ -28,6 +29,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
         this.userDetailService = userDetailService;
     }
 
+
     /**
      * Responsible for filtering and/or denying unauthorized http requests.
      * @param request HttpRequest
@@ -37,10 +39,8 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
      * @throws IOException
      */
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
         var authHeader = request.getHeader("Authorization");
         if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);

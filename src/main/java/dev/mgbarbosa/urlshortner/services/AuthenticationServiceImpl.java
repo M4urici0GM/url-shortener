@@ -8,6 +8,7 @@ import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.security.AuthenticationToken;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     public boolean isAuthenticated() {
         var ctx = SecurityContextHolder.getContext();
+        if (ctx.getAuthentication().getClass().isAssignableFrom(AnonymousAuthenticationToken.class)) {
+            return false;
+        }
+
         return ctx
                 .getAuthentication()
                 .isAuthenticated();
