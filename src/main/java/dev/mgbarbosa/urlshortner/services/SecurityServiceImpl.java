@@ -107,7 +107,6 @@ public class SecurityServiceImpl implements SecurityService {
      * @param claims    the claims list to be added to the token
      * @param expiresAt the time token will be expired.
      * @return the created jwt token
-     * @throws InvalidApplicationException internal JWT exception.
      */
     @Override
     public JwtToken generateToken(List<Claim> claims, Instant expiresAt) {
@@ -123,14 +122,14 @@ public class SecurityServiceImpl implements SecurityService {
                 .withClaim("jti", tokenIdentifier.toString());
 
         claims.stream()
-                .filter(x -> !privateClaimNames.contains(x))
+                .filter(x -> !privateClaimNames.contains(x.getName()))
                 .forEach((claim) -> jwtBuilder.withClaim(claim.getName(), claim.getValue()));
 
-        return new JwtToken(
-                jwtBuilder.sign(getAlgorithm()),
-                now,
-                expiresAt);
-
+        return JwtToken.builder()
+            .token(jwtBuilder.sign(getAlgorithm()))
+            .createdAt(now)
+            .expiresAt(expiresAt)
+            .build();
     }
 
     private Algorithm getAlgorithm() {

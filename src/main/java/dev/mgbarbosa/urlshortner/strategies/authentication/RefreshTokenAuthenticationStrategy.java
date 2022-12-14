@@ -4,7 +4,9 @@ import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequestDto;
 import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.SecurityCachingRepository;
 import javax.management.InvalidApplicationException;
+import org.springframework.stereotype.Component;
 
+@Component("refreshTokenAuthenticationStrategy")
 public class RefreshTokenAuthenticationStrategy implements AuthenticationStrategy {
     private final SecurityCachingRepository _cacheRepository;
 

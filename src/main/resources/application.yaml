@@ -1,0 +1,14 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: '6370'
+    mongodb:
+      uri: ${MONGODB_URL}
+      uuid-representation: standard
+jwt:
+  expiration-seconds: '3600'
+  secret: bukiUNr1DM9DSfzAxG43
+  refresh-expiration-seconds: '7200'
+  issuer: http://localhost:8080/
+  audience: url-shortener

@@ -2,10 +2,9 @@ package dev.mgbarbosa.urlshortner.repositories;
 
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.CachingShortedUrlRepository;
+import java.util.Optional;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CachingShortedUrlRepositoryImpl
@@ -27,11 +26,6 @@ public class CachingShortedUrlRepositoryImpl
     @Override
     public Optional<ShortenedUrl> findByShortVersion(String id) {
         return this.findByKey(id);
-    }
-
-    @Override
-    public boolean saveById(ShortenedUrl shortenedUrl) {
-        return this.saveByKey(shortenedUrl.getId(), shortenedUrl);
     }
 
     @Override

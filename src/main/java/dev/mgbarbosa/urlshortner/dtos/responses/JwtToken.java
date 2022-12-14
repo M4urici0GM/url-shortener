@@ -1,26 +1,17 @@
 package dev.mgbarbosa.urlshortner.dtos.responses;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.time.Instant;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@Builder
+@RequiredArgsConstructor
 public class JwtToken {
-    private String token;
-    private UUID tokenIdentifier;
-    private Instant createdAt;
-    private Instant expiresAt;
-
-    public JwtToken(String token, Instant createdAt, Instant expiresAt) {
-        this.token = token;
-        this.createdAt = createdAt;
-        this.expiresAt = expiresAt;
-    }
-
-    public JwtToken(String token, Instant createdAt, Instant expiresAt, UUID tokenIdentifier) {
-        this(token, createdAt, expiresAt);
-        this.tokenIdentifier = tokenIdentifier;
-    }
+    private final String token;
+    private final UUID tokenIdentifier;
+    private final Instant createdAt;
+    private final Instant expiresAt;
 }

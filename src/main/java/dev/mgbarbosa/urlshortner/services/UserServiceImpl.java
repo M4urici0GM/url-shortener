@@ -11,6 +11,7 @@ import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto user) throws EntityExists {
         if (userExists(user.getEmail()) || userExistsByUsername(user.getUsername())) {
             throw new EntityExists("user", user.getEmail());

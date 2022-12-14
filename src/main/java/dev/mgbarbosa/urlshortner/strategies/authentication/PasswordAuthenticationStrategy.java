@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.management.InvalidApplicationException;
 
-@Component
+@Component("passwordAuthenticationStrategy")
 public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
     private final UserRepository userRepository;
     private final SecurityService securityService;

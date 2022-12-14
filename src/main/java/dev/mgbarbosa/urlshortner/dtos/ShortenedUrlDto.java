@@ -3,6 +3,7 @@ package dev.mgbarbosa.urlshortner.dtos;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ShortenedUrlDto {
     @Getter
-    private String id;
+    private UUID id;
 
     @Getter
     private LocalDateTime createdAt;

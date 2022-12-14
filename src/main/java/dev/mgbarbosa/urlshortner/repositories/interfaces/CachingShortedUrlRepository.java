@@ -7,6 +7,5 @@ import java.util.Optional;
 public interface CachingShortedUrlRepository {
     Optional<ShortenedUrl> findById(String id);
     Optional<ShortenedUrl> findByShortVersion(String id);
-    boolean saveById(ShortenedUrl shortenedUrl);
     boolean saveByShortVersion(ShortenedUrl shortenedUrl);
 }
