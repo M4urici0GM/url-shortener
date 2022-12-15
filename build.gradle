@@ -6,9 +6,18 @@ plugins {
     id 'jacoco'
 }
 
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'url-shortener'
+java.sourceCompatibility = JavaVersion.VERSION_17
+
 repositories {
     jcenter()
     mavenCentral()
+}
+
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
 }
 
 dependencies {
@@ -21,25 +30,18 @@ dependencies {
     implementation 'org.springframework.data:spring-data-redis:3.0.0'
 
     implementation 'org.mindrot:jbcrypt:0.4'
-    implementation 'junit:junit:4.13.2'
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation 'io.lettuce:lettuce-core:6.2.1.RELEASE'
     implementation 'dev.failsafe:failsafe:3.2.4'
     implementation 'org.projectlombok:lombok:1.18.24'
     implementation 'com.github.javafaker:javafaker:1.0.2'
 
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2:2.1.214'
     testImplementation 'it.ozimov:embedded-redis:0.7.3'
 
     annotationProcessor 'org.projectlombok:lombok'
 }
-
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
-description = 'accessing-data-mongodb'
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 publishing {
     publications {
@@ -49,7 +51,40 @@ publishing {
     }
 }
 
+test {
+    // Enable JUnit 5 (Gradle 4.6+).
+    useJUnitPlatform()
 
+    // Always run tests, even when nothing changed.
+    dependsOn 'cleanTest'
+
+    // Show test results.
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        xml.outputLocation = file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
+    }
+
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+
+                    ])
+        })
+    }
+}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

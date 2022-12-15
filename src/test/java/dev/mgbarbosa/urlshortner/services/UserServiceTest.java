@@ -1,30 +1,32 @@
 package dev.mgbarbosa.urlshortner.services;
 
-import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
+import com.github.javafaker.Faker;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
+import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
 import dev.mgbarbosa.urlshortner.entities.User;
-import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import dev.mgbarbosa.urlshortner.services.interfaces.PagingUtils;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
-import com.github.javafaker.Faker;
-import org.junit.Test;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @DisplayName("User Service Tests")
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @Mock
     UserRepository userRepository;
@@ -59,18 +61,18 @@ public class UserServiceTest {
         assert result.getRecords().stream().noneMatch(x -> x.getPassword() != null);
     }
 
-    @Test(expected = EntityExists.class)
+    @Test
     @DisplayName("Should Throw exception if user email already exists.")
     public void shouldThrowExceptionIfUserEmailExists() {
         // Arrange
         var faker = new Faker();
         var randomEmail = faker.internet().emailAddress();
         var user = new UserDto(
-                "some-id",
-                faker.name().fullName(),
-                randomEmail,
-                faker.lorem().fixedString(15),
-                "");
+            UUID.randomUUID(),
+            faker.name().fullName(),
+            randomEmail,
+            faker.lorem().fixedString(15),
+            "");
 
         Mockito.when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail))).thenReturn(true);
 
@@ -78,18 +80,18 @@ public class UserServiceTest {
         userService.createUser(user);
     }
 
-    @Test(expected = EntityExists.class)
+    @Test
     @DisplayName("Should Throw exception if username already exists.")
     public void shouldThrowExceptionIfUsernameExists() {
         // Arrange
         var faker = new Faker();
         var randomEmail = faker.internet().emailAddress();
         var user = new UserDto(
-                "some-id",
-                faker.name().fullName(),
-                randomEmail,
-                faker.lorem().fixedString(15),
-                "");
+            UUID.randomUUID(),
+            faker.name().fullName(),
+            randomEmail,
+            faker.lorem().fixedString(15),
+            "");
 
         Mockito.when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail))).thenReturn(true);
 
@@ -107,11 +109,11 @@ public class UserServiceTest {
         var passwordHash = BCrypt.hashpw(randomPassword, BCrypt.gensalt());
 
         var userDto = new UserDto(
-                "some-id",
-                faker.name().fullName(),
-                randomEmail,
-                randomPassword,
-                faker.internet().avatar());
+            UUID.randomUUID(),
+            faker.name().fullName(),
+            randomEmail,
+            randomPassword,
+            faker.internet().avatar());
 
         var expectedUser = new User(
                 userDto.getName(),

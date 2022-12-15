@@ -7,8 +7,8 @@ spring:
       uri: ${MONGODB_URL}
       uuid-representation: standard
 jwt:
-  expiration-seconds: '3600'
-  secret: bukiUNr1DM9DSfzAxG43
-  refresh-expiration-seconds: '7200'
-  issuer: http://localhost:8080/
-  audience: url-shortener
+  expiration-seconds: ${JWT_EXPIRATION_SECONDS}
+  secret: ${JWT_SECRET}
+  refresh-expiration-seconds: ${JWT_REFRESH_TOKEN_EXPIRATION_SECONDS}
+  issuer: ${JWT_ISSUER}
+  audience: ${JWT_AUDIENCE}

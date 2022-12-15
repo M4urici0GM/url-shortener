@@ -1,17 +1,16 @@
 package dev.mgbarbosa.urlshortner.services;
 
 import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
-import org.junit.Test;
+import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
-import java.util.Objects;
-
 @DisplayName("Paging util tests.")
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PagingUtilsImplTests {
 
     @InjectMocks

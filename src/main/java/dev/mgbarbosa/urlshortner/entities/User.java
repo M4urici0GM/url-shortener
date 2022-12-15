@@ -1,19 +1,20 @@
 package dev.mgbarbosa.urlshortner.entities;
 
+import java.util.UUID;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Document(collection = "users")
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@Document(collection = "users")
 public class User implements Serializable {
-
     @Id
-    @Generated
-    private String id;
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
     private String name;
     private String email;
     private final String username;

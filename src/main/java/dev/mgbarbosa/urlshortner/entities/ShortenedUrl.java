@@ -16,22 +16,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Document(collection = "shortened_urls")
 public class ShortenedUrl implements Serializable {
-
     @Id
-    @Getter
+    @Builder.Default
     private UUID id = UUID.randomUUID();
-
     private String originalVersion;
     private String shortenedVersion;
     private boolean isPublic;
-    private String userId;
+    private UUID userId;
     private LocalDateTime createdAt;
 
     private ShortenedUrl() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ShortenedUrl(String original, String shortedVersion, String userId, boolean isPublic) {
+    public ShortenedUrl(String original, String shortedVersion, UUID userId, boolean isPublic) {
         this();
         this.userId = userId;
         this.originalVersion = original;

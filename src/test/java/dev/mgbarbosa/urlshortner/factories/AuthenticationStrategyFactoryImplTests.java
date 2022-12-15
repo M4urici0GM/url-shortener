@@ -1,32 +1,27 @@
 package dev.mgbarbosa.urlshortner.factories;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
+
 import dev.mgbarbosa.urlshortner.exceptios.InvalidOperationException;
-import dev.mgbarbosa.urlshortner.repositories.interfaces.SecurityCachingRepository;
-import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
-import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
 import dev.mgbarbosa.urlshortner.strategies.authentication.PasswordAuthenticationStrategy;
 import dev.mgbarbosa.urlshortner.strategies.authentication.RefreshTokenAuthenticationStrategy;
-import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.HashMap;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DisplayName("Authentication Strategy Factory Service Tests")
-@RunWith(MockitoJUnitRunner.class)
+@SpringBootTest(webEnvironment = NONE)
 public class AuthenticationStrategyFactoryImplTests {
 
-    @Mock
-    SecurityCachingRepository securityCachingRepository;
+    @MockBean
+    PasswordAuthenticationStrategy passwordAuthenticationStrategy;
 
-    @Mock
-    SecurityService securityService;
-
-    @Mock
-    UserRepository userRepository;
+    @MockBean
+    RefreshTokenAuthenticationStrategy refreshTokenAuthenticationStrategy;
 
     @InjectMocks
     AuthenticationStrategyFactoryImpl authStrategyPattern;
@@ -36,7 +31,7 @@ public class AuthenticationStrategyFactoryImplTests {
     public void shouldCreateCorrectClass() throws InvalidOperationException {
         // Arrange
         var type = new HashMap<String, Class<?>>();
-        type.put("refreshToken", RefreshTokenAuthenticationStrategy.class);
+        type.put("refresh-token", RefreshTokenAuthenticationStrategy.class);
         type.put("password", PasswordAuthenticationStrategy.class);
 
 
@@ -51,13 +46,13 @@ public class AuthenticationStrategyFactoryImplTests {
         }
     }
 
-    @Test(expected = InvalidOperationException.class)
+    @Test
     @DisplayName("Should throw if type is invalid")
-    public void shouldThrowIfValueIsNotValid() throws InvalidOperationException {
+    public void shouldThrowIfValueIsNotValid() {
         // Arrange
         var type = "invalid-type";
 
         // Act
-        authStrategyPattern.create(type);
+        assertThrows(InvalidOperationException.class, () -> authStrategyPattern.create(type));
     }
 }

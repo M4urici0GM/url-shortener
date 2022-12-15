@@ -7,22 +7,20 @@ import dev.mgbarbosa.urlshortner.factories.interfaces.AuthenticationStrategyFact
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.security.AuthenticationToken;
 import dev.mgbarbosa.urlshortner.strategies.authentication.AuthenticationStrategy;
-import org.junit.Test;
+import java.util.UUID;
+import javax.management.InvalidApplicationException;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.management.InvalidApplicationException;
-
+@ExtendWith(MockitoExtension.class)
 @DisplayName("Authentication service tests")
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
 public class AuthenticationServiceImplTests {
 
     @Mock
@@ -60,7 +58,7 @@ public class AuthenticationServiceImplTests {
     public void isAuthenticated_ShouldReturnTrueIfUserIsAuthenticated() {
         var ctx = SecurityContextHolder.createEmptyContext();
         var principal = new AuthenticatedUserDetails();
-        principal.setId("632019a2c40a443d1ce69c3a");
+        principal.setId(UUID.randomUUID());
         principal.setName("John Doe");
         principal.setUsername("john.doe123");
         principal.setEmail("john@doe.com");

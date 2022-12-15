@@ -2,6 +2,7 @@ package dev.mgbarbosa.urlshortner.security;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.mgbarbosa.urlshortner.entities.User;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class AuthenticatedUserDetails {
     private String email;
     private String name;
     private String username;
-    private String id;
+    private UUID id;
 
     public AuthenticatedUserDetails(User user) {
         this.id = user.getId();

@@ -3,26 +3,28 @@ package dev.mgbarbosa.urlshortner.services;
 import com.github.javafaker.Faker;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
-import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.CachingShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
-import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.stubbing.Answer;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import java.nio.file.AccessDeniedException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+import org.springframework.test.context.ContextConfiguration;
 
 @DisplayName("Shortener Service tests")
 @ContextConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ShortenerServiceImplTests {
 
     @Mock
@@ -37,7 +39,7 @@ public class ShortenerServiceImplTests {
     @InjectMocks
     ShortenerServiceImpl shortenerService;
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @DisplayName("Should throw exception if max retries")
     public void shouldThrowExceptionIfRetryLimitReached() throws AccessDeniedException {
         // Arrange
@@ -80,7 +82,7 @@ public class ShortenerServiceImplTests {
         // Arrange
         var request = new CreateShortUrlRequest("https://github.com/m4urici0gm");
         var faker = new Faker();
-        var userId = "6320299bf86defddbabc9ea8";
+        var userId = UUID.randomUUID();
         var authenticatedUser = new AuthenticatedUserDetails(
                 faker.internet().emailAddress(),
                 faker.name().fullName(),
@@ -111,7 +113,7 @@ public class ShortenerServiceImplTests {
     public void shouldReturnFromCacheCorrectly() {
         // Arrange
         var randomId = "abCd";
-        var expectedObj = new ShortenedUrl("https://google.com", randomId, "632020a9d379c96722cefee3", false);
+        var expectedObj = new ShortenedUrl("https://google.com", randomId, UUID.randomUUID(), false);
 
         Mockito.when(cachingShortedUrlRepository.findByShortVersion(ArgumentMatchers.eq(randomId)))
                 .thenReturn(Optional.of(expectedObj));
@@ -124,12 +126,12 @@ public class ShortenerServiceImplTests {
                 .findByShortenedVersion(ArgumentMatchers.any());
     }
 
-    @Test(expected = EntityNotFoundException.class)
+    @Test
     @DisplayName("Should return from cache")
     public void shouldThrowIfShortenedUrlNotFound() {
         // Arrange
         var randomId = "abCd";
-        var expectedObj = new ShortenedUrl("https://google.com", randomId, "632020a9d379c96722cefee3", false);
+        var expectedObj = new ShortenedUrl("https://google.com", randomId, UUID.randomUUID(), false);
 
         Mockito.when(cachingShortedUrlRepository.findByShortVersion(ArgumentMatchers.eq(randomId)))
                 .thenReturn(Optional.empty());
@@ -143,7 +145,7 @@ public class ShortenerServiceImplTests {
     public void shouldCallDatabaseIfCacheNotPresent() {
         // Arange
         var randomId = "abCd";
-        var expectedObj = new ShortenedUrl("https://google.com", randomId, "632020a9d379c96722cefee3", false);
+        var expectedObj = new ShortenedUrl("https://google.com", randomId, UUID.randomUUID(), false);
 
         Mockito.when(shortedUrlRepository.findByShortenedVersion(ArgumentMatchers.eq(randomId)))
                 .thenReturn(Optional.of(expectedObj));

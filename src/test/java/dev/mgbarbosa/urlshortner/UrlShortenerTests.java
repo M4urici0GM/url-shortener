@@ -1,16 +1,10 @@
 package dev.mgbarbosa.urlshortner;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
-class UrlShortenerTests {
-
-	@Autowired
-	private RedisTemplate<?, ?> redisTemplate;
-
+public class UrlShortenerTests {
 	@Test
 	void contextLoads() {
 	}

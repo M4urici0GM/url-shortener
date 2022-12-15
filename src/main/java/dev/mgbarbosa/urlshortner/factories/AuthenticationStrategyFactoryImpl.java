@@ -5,15 +5,15 @@ import dev.mgbarbosa.urlshortner.factories.interfaces.AuthenticationStrategyFact
 import dev.mgbarbosa.urlshortner.strategies.authentication.AuthenticationStrategy;
 import java.util.Map;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class AuthenticationStrategyFactoryImpl implements AuthenticationStrategyFactory {
     private final Map<String, AuthenticationStrategy> _availableStrategies;
-
-    public AuthenticationStrategyFactoryImpl(Map<String, AuthenticationStrategy> availableStrategies) {
-        _availableStrategies = availableStrategies;
-    }
 
     /**
      * {@inheritDoc}
@@ -28,8 +28,8 @@ public class AuthenticationStrategyFactoryImpl implements AuthenticationStrategy
 
     private String getAuthenticationStrategyName(String grantType) throws InvalidOperationException {
         return switch (grantType.toLowerCase()) {
-            case "password" -> "passwordAuthenticationStrategy";
-            case "refresh-token"  -> "refreshTokenAuthenticationStrategy";
+            case "password" -> "PasswordAuthenticationStrategy";
+            case "refresh-token"  -> "RefreshTokenAuthenticationStrategy";
             default -> throw new InvalidOperationException();
         };
     }

@@ -58,7 +58,7 @@ public class SecurityServiceImpl implements SecurityService {
                 decoded.getClaim("email").asString(),
                 decoded.getClaim("name").asString(),
                 decoded.getClaim("username").asString(),
-                decoded.getClaim("userId").asString());
+                UUID.fromString(decoded.getClaim("userId").asString()));
     }
 
     /**
@@ -72,7 +72,7 @@ public class SecurityServiceImpl implements SecurityService {
     public JwtToken generateToken(User user) throws InvalidApplicationException {
         var expirationDate = getDefaultJwtExpirationTime();
         var claimList = Stream.of(
-                        new Claim("userId", user.getId()),
+                        new Claim("userId", user.getId().toString()),
                         new Claim("name", user.getName()),
                         new Claim("email", user.getEmail()),
                         new Claim("username", user.getUsername())
@@ -89,7 +89,7 @@ public class SecurityServiceImpl implements SecurityService {
         var expirationDate = Instant.now().plusSeconds(expirationSeconds);
         var claimList = Stream.of(
                 new Claim("email", user.getEmail()),
-                new Claim("userId", user.getId()),
+                new Claim("userId", user.getId().toString()),
                 new Claim("scope", "refresh-token")).toList();
 
         return generateToken(claimList, expirationDate);

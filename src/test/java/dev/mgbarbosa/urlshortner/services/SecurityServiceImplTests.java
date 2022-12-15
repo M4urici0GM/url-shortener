@@ -6,23 +6,22 @@ import com.github.javafaker.Faker;
 import dev.mgbarbosa.urlshortner.config.JwtProperties;
 import dev.mgbarbosa.urlshortner.dtos.Claim;
 import dev.mgbarbosa.urlshortner.entities.User;
-import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
-import org.mindrot.jbcrypt.BCrypt;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import javax.management.InvalidApplicationException;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
+import javax.management.InvalidApplicationException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mindrot.jbcrypt.BCrypt;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("SecurityService tests")
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SecurityServiceImplTests {
 
     @Mock
@@ -64,7 +63,7 @@ public class SecurityServiceImplTests {
 
     }
 
-    @Test(expected = InvalidApplicationException.class)
+    @Test
     @DisplayName("Should throw if expiration time is not set, or below 0")
     public void shouldThrowIfExpirationTimeNotSet() throws InvalidApplicationException {
         // Arrange
@@ -74,8 +73,6 @@ public class SecurityServiceImplTests {
                 faker.internet().emailAddress(),
                 faker.internet().avatar(),
                 "SOME_PASS_HASH");
-
-        user.setId("SOME_ID");
 
         // act
         securityService.generateToken(user);
@@ -95,8 +92,6 @@ public class SecurityServiceImplTests {
                 faker.internet().avatar(),
                 "SOME_PASS_HASH");
 
-        user.setId("SOME_ID");
-
         Mockito.when(jwtProperties.getIssuer()).thenReturn(issuerValue);
         Mockito.when(jwtProperties.getAudience()).thenReturn(audienceValue);
         Mockito.when(jwtProperties.getSecret()).thenReturn(secretValue);
@@ -104,7 +99,7 @@ public class SecurityServiceImplTests {
         var jwt = JWT.create()
                 .withAudience(audienceValue)
                 .withIssuer(issuerValue)
-                .withClaim("userId", user.getId())
+                .withClaim("userId", user.getId().toString())
                 .withClaim("name", user.getName())
                 .withClaim("email", user.getEmail())
                 .withClaim("username", user.getUsername())
@@ -136,7 +131,6 @@ public class SecurityServiceImplTests {
                 faker.internet().emailAddress(),
                 faker.internet().avatar(),
                 "SOME_PASS_HASH");
-        user.setId("SOME_ID");
 
         Mockito.when(jwtProperties.getIssuer()).thenReturn(issuerValue);
         Mockito.when(jwtProperties.getAudience()).thenReturn(audienceValue);
@@ -151,7 +145,7 @@ public class SecurityServiceImplTests {
         var decoded = jwtVerifier.verify(result.getToken());
         var claims = decoded.getClaims();
 
-        assert checkClaim(claims, "userId", user.getId());
+        assert checkClaim(claims, "userId", user.getId().toString());
         assert checkClaim(claims, "name", user.getName());
         assert checkClaim(claims, "email", user.getEmail());
         assert checkClaim(claims, "username", user.getUsername());
@@ -184,7 +178,7 @@ public class SecurityServiceImplTests {
         var claims = decoded.getClaims();
 
         assert Objects.equals(expirationTime, result.getExpiresAt());
-        assert expectedClaims.stream().allMatch(claim -> claims.keySet().stream().anyMatch(x -> x == claim.getName()));
+        assert expectedClaims.stream().allMatch(claim -> claims.keySet().stream().anyMatch(x -> Objects.equals(x, claim.getName())));
         assert claims.get("exp").asInstant().getEpochSecond() == expirationTime.getEpochSecond();
         assert claims.get("aud").asString().equals(audienceValue);
         assert claims.get("iss").asString().equals(issuerValue);

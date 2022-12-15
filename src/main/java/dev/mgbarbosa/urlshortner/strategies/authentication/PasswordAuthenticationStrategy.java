@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.management.InvalidApplicationException;
 
-@Component("passwordAuthenticationStrategy")
+@Component("PasswordAuthenticationStrategy")
 public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
     private final UserRepository userRepository;
     private final SecurityService securityService;
@@ -25,7 +25,6 @@ public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
         this.securityService = securityService;
         _securityCache = securityCache;
     }
-
 
     @Override
     public AuthenticateResponseDto execute(AuthenticateRequestDto request) throws InvalidApplicationException {

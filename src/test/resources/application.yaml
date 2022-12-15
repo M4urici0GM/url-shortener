@@ -1,0 +1,14 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: '6370'
+    mongodb:
+      uri: mongodb://admin:admin@localhost/test-db
+      uuid-representation: standard
+jwt:
+  expiration-seconds: '7200'
+  secret: OPDIASODASUDHASOIFAFUIPAH
+  refresh-expiration-seconds: '7200'
+  issuer: 'http://localhost:3000'
+  audience: 'http://localhost:3000'
