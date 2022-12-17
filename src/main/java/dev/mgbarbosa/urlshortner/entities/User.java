@@ -17,10 +17,15 @@ public class User implements Serializable {
     private UUID id = UUID.randomUUID();
     private String name;
     private String email;
-    private final String username;
+    private String username;
     private String passwordHash;
 
+    public User() {
+        this.id = UUID.randomUUID();
+    }
+
     public User(String name, String email, String username, String passwordHash) {
+        this();
         this.name = name;
         this.email = email;
         this.username = username;

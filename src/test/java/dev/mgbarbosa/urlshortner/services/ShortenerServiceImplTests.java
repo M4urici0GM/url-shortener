@@ -1,8 +1,11 @@
 package dev.mgbarbosa.urlshortner.services;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.github.javafaker.Faker;
 import dev.mgbarbosa.urlshortner.dtos.requests.CreateShortUrlRequest;
 import dev.mgbarbosa.urlshortner.entities.ShortenedUrl;
+import dev.mgbarbosa.urlshortner.exceptios.EntityNotFoundException;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.CachingShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.ShortedUrlRepository;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
@@ -49,8 +52,7 @@ public class ShortenerServiceImplTests {
                 .thenReturn(true,true, true);
 
         // Act
-        shortenerService.createShortUrl(request);
-
+        assertThrows(RuntimeException.class, () -> shortenerService.createShortUrl(request));
     }
 
     @Test
@@ -104,7 +106,7 @@ public class ShortenerServiceImplTests {
 
         Mockito.verify(shortedUrlRepository, Mockito.times(1))
                 .save(ArgumentMatchers.argThat(shortenedUrl -> {
-                    return !shortenedUrl.isPublic() && shortenedUrl.getUserId().equals("6320299bf86defddbabc9ea8");
+                    return !shortenedUrl.isPublic() && shortenedUrl.getUserId().equals(userId);
                 }));
     }
 
@@ -131,13 +133,12 @@ public class ShortenerServiceImplTests {
     public void shouldThrowIfShortenedUrlNotFound() {
         // Arrange
         var randomId = "abCd";
-        var expectedObj = new ShortenedUrl("https://google.com", randomId, UUID.randomUUID(), false);
 
         Mockito.when(cachingShortedUrlRepository.findByShortVersion(ArgumentMatchers.eq(randomId)))
                 .thenReturn(Optional.empty());
 
         // Act
-        shortenerService.findShortUrlBy(randomId);
+        assertThrows(EntityNotFoundException.class, () -> shortenerService.findShortUrlBy(randomId));
     }
 
     @Test

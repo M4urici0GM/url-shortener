@@ -1,20 +1,21 @@
 package dev.mgbarbosa.urlshortner.factories;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 import dev.mgbarbosa.urlshortner.exceptios.InvalidOperationException;
 import dev.mgbarbosa.urlshortner.strategies.authentication.PasswordAuthenticationStrategy;
 import dev.mgbarbosa.urlshortner.strategies.authentication.RefreshTokenAuthenticationStrategy;
 import java.util.HashMap;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DisplayName("Authentication Strategy Factory Service Tests")
-@SpringBootTest(webEnvironment = NONE)
+@SpringBootTest
 public class AuthenticationStrategyFactoryImplTests {
 
     @MockBean
@@ -23,7 +24,7 @@ public class AuthenticationStrategyFactoryImplTests {
     @MockBean
     RefreshTokenAuthenticationStrategy refreshTokenAuthenticationStrategy;
 
-    @InjectMocks
+    @Autowired
     AuthenticationStrategyFactoryImpl authStrategyPattern;
 
     @Test
@@ -42,7 +43,7 @@ public class AuthenticationStrategyFactoryImplTests {
             var result = authStrategyPattern.create(key);
 
             // Result
-            assert result.getClass().isAssignableFrom(expectedValue);
+             Assertions.assertTrue(expectedValue.isAssignableFrom(AopUtils.getTargetClass(result)));
         }
     }
 

@@ -1,9 +1,13 @@
 package dev.mgbarbosa.urlshortner.services;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import com.github.javafaker.Faker;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
 import dev.mgbarbosa.urlshortner.entities.User;
+import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import dev.mgbarbosa.urlshortner.services.interfaces.PagingUtils;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
@@ -18,7 +22,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -49,8 +52,8 @@ public class UserServiceTest {
         var pageRequest = PageRequest.of(request.getOffset(), request.getPageSize(), sort);
         var expectedUserList = createUserList(10);
 
-        Mockito.when(pagingUtils.parseSorting("+id")).thenReturn(sort);
-        Mockito.when(userRepository.findAll(ArgumentMatchers.eq(pageRequest))).thenReturn(
+        when(pagingUtils.parseSorting("+id")).thenReturn(sort);
+        when(userRepository.findAll(ArgumentMatchers.eq(pageRequest))).thenReturn(
                 new PageImpl<>(expectedUserList, Pageable.ofSize(expectedUserList.size()), expectedUserList.size()));
 
         // Act
@@ -74,10 +77,10 @@ public class UserServiceTest {
             faker.lorem().fixedString(15),
             "");
 
-        Mockito.when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail))).thenReturn(true);
+        when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail))).thenReturn(true);
 
         // Act
-        userService.createUser(user);
+        assertThrows(EntityExists.class, () -> userService.createUser(user));
     }
 
     @Test
@@ -93,10 +96,10 @@ public class UserServiceTest {
             faker.lorem().fixedString(15),
             "");
 
-        Mockito.when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail))).thenReturn(true);
+        when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail))).thenReturn(true);
 
         // Act
-        userService.createUser(user);
+       assertThrows(EntityExists.class, () -> userService.createUser(user));
     }
 
     @Test
@@ -121,16 +124,16 @@ public class UserServiceTest {
                 userDto.getUsername(),
                 passwordHash);
 
-        Mockito.when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail)))
+        when(userRepository.existsByEmail(ArgumentMatchers.eq(randomEmail)))
                 .thenReturn(false);
 
-        Mockito.when(userRepository.existsByUsername(ArgumentMatchers.eq(userDto.getUsername())))
+        when(userRepository.existsByUsername(ArgumentMatchers.eq(userDto.getUsername())))
                 .thenReturn(false);
 
-        Mockito.when(securityService.hashPassword(ArgumentMatchers.anyString()))
+        when(securityService.hashPassword(ArgumentMatchers.anyString()))
                 .thenReturn(faker.lorem().fixedString(5));
 
-        Mockito.when(userRepository.save(ArgumentMatchers.any())).thenReturn(expectedUser);
+        when(userRepository.save(ArgumentMatchers.any())).thenReturn(expectedUser);
 
         // Act
         var createdUser = userService.createUser(userDto);

@@ -1,5 +1,7 @@
 package dev.mgbarbosa.urlshortner.services;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.github.javafaker.Faker;
@@ -75,7 +77,7 @@ public class SecurityServiceImplTests {
                 "SOME_PASS_HASH");
 
         // act
-        securityService.generateToken(user);
+        assertThrows(InvalidApplicationException.class, () -> securityService.generateToken(user));
     }
 
     @Test

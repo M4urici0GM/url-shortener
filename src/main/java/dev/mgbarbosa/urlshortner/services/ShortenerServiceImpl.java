@@ -85,7 +85,7 @@ public class ShortenerServiceImpl implements ShortenerService {
             return new ShortenedUrlDto(maybeCached.get());
 
         var maybeShortenedUrl = shortedUrlRepository.findByShortenedVersion(urlId);
-        if (!maybeShortenedUrl.isPresent()) {
+        if (maybeShortenedUrl.isEmpty()) {
             throw new EntityNotFoundException("", "");
         }
 
