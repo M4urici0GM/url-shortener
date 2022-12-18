@@ -9,13 +9,13 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DisplayName("Authentication Strategy Factory Service Tests")
-@SpringBootTest
 public class AuthenticationStrategyFactoryImplTests {
 
     @MockBean
@@ -24,7 +24,7 @@ public class AuthenticationStrategyFactoryImplTests {
     @MockBean
     RefreshTokenAuthenticationStrategy refreshTokenAuthenticationStrategy;
 
-    @Autowired
+    @InjectMocks
     AuthenticationStrategyFactoryImpl authStrategyPattern;
 
     @Test

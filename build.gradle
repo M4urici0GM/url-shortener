@@ -36,8 +36,8 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.24'
     implementation 'com.github.javafaker:javafaker:1.0.2'
 
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.3.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2:2.1.214'
     testImplementation 'it.ozimov:embedded-redis:0.7.3'
 
     annotationProcessor 'org.projectlombok:lombok'
