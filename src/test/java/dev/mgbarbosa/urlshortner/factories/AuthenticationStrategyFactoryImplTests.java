@@ -9,23 +9,26 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @DisplayName("Authentication Strategy Factory Service Tests")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = AuthenticationStrategyFactoryImpl.class)
+@ExtendWith(SpringExtension.class)
 public class AuthenticationStrategyFactoryImplTests {
 
-    @MockBean
+    @Autowired
+    AuthenticationStrategyFactoryImpl authStrategyPattern;
+
+    @MockBean(name = "PasswordAuthenticationStrategy")
     PasswordAuthenticationStrategy passwordAuthenticationStrategy;
 
-    @MockBean
+    @MockBean(name = "RefreshTokenAuthenticationStrategy")
     RefreshTokenAuthenticationStrategy refreshTokenAuthenticationStrategy;
-
-    @InjectMocks
-    AuthenticationStrategyFactoryImpl authStrategyPattern;
 
     @Test
     @DisplayName("Should create correct object")

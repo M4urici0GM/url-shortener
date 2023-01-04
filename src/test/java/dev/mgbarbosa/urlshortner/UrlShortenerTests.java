@@ -1,14 +1,15 @@
 package dev.mgbarbosa.urlshortner;
 
-import dev.mgbarbosa.urlshortner.config.MongodbConfiguration;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+@AutoConfigureDataMongo
+@DirtiesContext
 @SpringBootTest(classes = UrlShortenerApplication.class)
-@ActiveProfiles("tests")
-@Import(MongodbConfiguration.class)
+@ActiveProfiles("test")
 public class UrlShortenerTests {
 	@Test
 	public void contextLoads() {
