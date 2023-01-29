@@ -12,3 +12,9 @@ jwt:
   refresh-expiration-seconds: ${JWT_REFRESH_TOKEN_EXPIRATION_SECONDS}
   issuer: ${JWT_ISSUER}
   audience: ${JWT_AUDIENCE}
+logging:
+  level:
+    dev:
+      mgbarbosa:
+        urlshortner: debug
+    root: info

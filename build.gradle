@@ -6,7 +6,7 @@ plugins {
     id 'jacoco'
 }
 
-group = 'com.example'
+group = 'dev.mgbarbosa.urlshortener'
 version = '0.0.1-SNAPSHOT'
 description = 'url-shortener'
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -28,6 +28,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test:6.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.0'
     implementation 'org.springframework.data:spring-data-redis:3.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.6'
+    implementation 'org.slf4j:slf4j-simple:2.0.6'
 
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'com.auth0:java-jwt:4.2.1'
@@ -61,6 +63,10 @@ test {
     }
 }
 
+bootRun {
+    systemProperty('spring.config.import', 'optional:file:.env[.properties]')
+    jvmArgs("-DconfigFileName=config/application.yaml", "-DchecksumEnabled=false")
+}
 
 jacoco {
     toolVersion = "0.8.8"
