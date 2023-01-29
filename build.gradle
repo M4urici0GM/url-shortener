@@ -43,6 +43,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
     annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
@@ -51,6 +52,8 @@ test {
 
     // Always run tests, even when nothing changed.
     dependsOn 'cleanTest'
+
+    systemProperty('spring.profiles.active', 'test')
 
     // Show test results.
     testLogging {
