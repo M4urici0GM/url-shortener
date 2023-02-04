@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'dev.mgbarbosa.urlshortener'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0'
 description = 'url-shortener'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
