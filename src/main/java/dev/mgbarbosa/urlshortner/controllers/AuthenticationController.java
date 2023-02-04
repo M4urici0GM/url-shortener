@@ -18,34 +18,36 @@ import java.nio.file.AccessDeniedException;
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 public class AuthenticationController {
-    private final AuthenticationService authenticationService;
+  private final AuthenticationService authenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
+  public AuthenticationController(AuthenticationService authenticationService) {
+    this.authenticationService = authenticationService;
+  }
 
-    /**
-     * Tries to authenticate user with username and password.
-     *
-     * @param request Request containing username and password
-     * @return returns object containing userDetails + jwtToken
-     */
-    @PostMapping
-    public ResponseEntity<AuthenticateResponseDto> authenticateUser(@Valid @RequestBody AuthenticateRequestDto request)
-            throws URISyntaxException, InvalidApplicationException, InvalidOperationException {
-        var result = authenticationService.authenticateUser(request);
-        return ResponseEntity.created(new URI("")).body(result);
-    }
+  /**
+   * Tries to authenticate user with username and password.
+   *
+   * @param request Request containing username and password
+   * @return returns object containing userDetails + jwtToken
+   */
+  @PostMapping
+  public ResponseEntity<AuthenticateResponseDto> authenticateUser(@Valid @RequestBody AuthenticateRequestDto request)
+      throws URISyntaxException, InvalidApplicationException, InvalidOperationException {
+    final var result = authenticationService.authenticateUser(request);
+    return ResponseEntity
+        .created(new URI(""))
+        .body(result);
+  }
 
-    /**
-     * Get user profile, containing user details + profile info, such as roles.
-     */
-    @GetMapping("/profile")
-    @PreAuthorize("isAuthenticated()")
-    ResponseEntity<AuthenticatedUserDetails> getProfile() throws AccessDeniedException {
-        var user = authenticationService.getAuthenticatedUser();
-        return ResponseEntity
-                .ok()
-                .body(user);
-    }
+  /**
+   * Get user profile, containing user details + profile info, such as roles.
+   */
+  @GetMapping("/profile")
+  @PreAuthorize("isAuthenticated()")
+  ResponseEntity<AuthenticatedUserDetails> getProfile() throws AccessDeniedException {
+    var user = authenticationService.getAuthenticatedUser();
+    return ResponseEntity
+        .ok()
+        .body(user);
+  }
 }

@@ -6,7 +6,7 @@ plugins {
     id 'jacoco'
 }
 
-group = 'com.example'
+group = 'dev.mgbarbosa.urlshortener'
 version = '0.0.1-SNAPSHOT'
 description = 'url-shortener'
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -28,6 +28,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test:6.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.0'
     implementation 'org.springframework.data:spring-data-redis:3.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.6'
+    implementation 'org.slf4j:slf4j-simple:2.0.6'
 
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'com.auth0:java-jwt:4.2.1'
@@ -36,19 +38,14 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.24'
     implementation 'com.github.javafaker:javafaker:1.0.2'
 
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.3.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2:2.1.214'
     testImplementation 'it.ozimov:embedded-redis:0.7.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
     annotationProcessor 'org.projectlombok:lombok'
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {
@@ -58,12 +55,18 @@ test {
     // Always run tests, even when nothing changed.
     dependsOn 'cleanTest'
 
+    systemProperty('spring.profiles.active', 'test')
+
     // Show test results.
     testLogging {
         events "passed", "skipped", "failed"
     }
 }
 
+bootRun {
+    systemProperty('spring.config.import', 'optional:file:.env[.properties]')
+    jvmArgs("-DconfigFileName=config/application.yaml", "-DchecksumEnabled=false")
+}
 
 jacoco {
     toolVersion = "0.8.8"

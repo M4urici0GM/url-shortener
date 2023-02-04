@@ -7,12 +7,14 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UserDto {
