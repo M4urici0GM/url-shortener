@@ -3,6 +3,7 @@ package dev.mgbarbosa.urlshortner.dtos.requests;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class AuthenticateRequestDto {
     @NotEmpty(message = "Username is required.")
     private String username;

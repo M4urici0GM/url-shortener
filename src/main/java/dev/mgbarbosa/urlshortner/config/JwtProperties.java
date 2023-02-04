@@ -16,19 +16,18 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JwtProperties {
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:localhost}")
     private String secret;
 
-    @Value("${jwt.audience}")
+    @Value("${jwt.audience:localhost}")
     private String audience;
 
-    @Value("${jwt.issuer}")
+    @Value("${jwt.issuer:localhost}")
     private String issuer;
 
-    @Value("${jwt.expiration-seconds}")
+    @Value("${jwt.expiration-seconds:7200}")
     private long expirationTime;
 
-    @Value("${jwt.refresh-expiration-seconds}")
+    @Value("${jwt.refresh-expiration-seconds:7200}")
     private long refreshTokenExpirationTime;
-
 }

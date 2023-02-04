@@ -1,5 +1,9 @@
 package dev.mgbarbosa.urlshortner.services;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import dev.mgbarbosa.urlshortner.dtos.requests.AuthenticateRequestDto;
 import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
 import dev.mgbarbosa.urlshortner.exceptios.InvalidOperationException;
@@ -17,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,21 +41,27 @@ public class AuthenticationServiceImplTests {
         var request = new AuthenticateRequestDto("m4urici0gm", "blueScreen#666", "password");
         var strategyMock = Mockito.mock(AuthenticationStrategy.class);
 
-        Mockito.when(authStrategyFactory.create(ArgumentMatchers.anyString()))
+        when(authStrategyFactory.create(ArgumentMatchers.anyString()))
                 .thenReturn(strategyMock);
 
-        Mockito.when(strategyMock.execute(ArgumentMatchers.any()))
+        when(strategyMock.execute(ArgumentMatchers.any()))
                 .thenReturn(new AuthenticateResponseDto());
 
         // Act
-        var result = authenticationService.authenticateUser(request);
+        authenticationService.authenticateUser(request);
 
         // Assert
-        Mockito.verify(authStrategyFactory, Mockito.times(1))
+        verify(authStrategyFactory, Mockito.times(1))
                 .create(request.getGrantType());
 
-        Mockito.verify(strategyMock, Mockito.times(1))
+        verify(strategyMock, Mockito.times(1))
                 .execute(ArgumentMatchers.eq(request));
+    }
+
+    @Test
+    @DisplayName("isAuthenticated should return true if user is not authenticated")
+    public void isAuthenticated_shouldReturnTrue_whenUserIsNotAuthenticated() {
+        assertFalse(authenticationService.isAuthenticated());
     }
 
     @Test

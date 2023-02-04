@@ -1,10 +1,20 @@
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        port: 27017
+        version: 5.0.5
 spring:
+  config:
+    activate:
+      on-profile: test
   data:
     redis:
       host: localhost
       port: '6370'
     mongodb:
-      uri: mongodb://admin:admin@localhost/test-db
+      uri: mongodb://localhost:65000/test
+      port: 65000
       uuid-representation: standard
 jwt:
   expiration-seconds: '7200'
