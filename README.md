@@ -30,7 +30,7 @@ To contribute to this project, follow these steps:
 1. Fork this repository.
 2. Create a branch: `git checkout -b <branch_name>`.
 3. Make your changes.
-4. Make sure that all unit tests passes.
+4. Make sure that all unit tests passes with `./gradlew clean build jacocoTestReport`
 5. Push to the original branch: `git push origin <project_name>/<location>`
 6. Create the pull request.
 
