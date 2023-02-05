@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  # different name
+  name: url-shortener-certificate
+  namespace: url-shortener
+spec:
+  # dedicate secret for the TLS cert
+  secretName: url-shortener-cert-secret
+  issuerRef:
+    # referencing the production issuer
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - short.mgbarbosa.dev
