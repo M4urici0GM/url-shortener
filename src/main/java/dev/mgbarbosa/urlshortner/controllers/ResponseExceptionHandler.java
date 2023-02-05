@@ -2,6 +2,7 @@ package dev.mgbarbosa.urlshortner.controllers;
 
 import dev.mgbarbosa.urlshortner.dtos.ApiError;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
+import java.util.HashMap;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.HashMap;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice

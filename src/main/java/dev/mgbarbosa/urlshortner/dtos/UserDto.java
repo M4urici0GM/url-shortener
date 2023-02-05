@@ -1,7 +1,7 @@
 package dev.mgbarbosa.urlshortner.dtos;
 
-import dev.mgbarbosa.urlshortner.entities.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import dev.mgbarbosa.urlshortner.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

@@ -7,12 +7,44 @@ Before you begin, ensure you have met the following requirements:
 - Java JDK 17 or later
 - A running mongodb instance.
 
+## Running it with Docker
+
+- Make sure that you have docker running 
+- Pull the image with: `docker pull ghcr.io/m4urici0gm/url-shortener:latest`
+
+Start the container with
+```
+    docker run --name some-url-shortener \
+        --restart always
+        -e 'MONGODB_URL=<your-mongodb-connection-string>'
+        -e 'JWT_ISSUER=http://localhost:8080'
+        -e 'JWT_AUDIENCE=http://localhost:8080'
+        -e 'JWT_EXPIRATION_SECONDS=7200'
+        -e 'JWT_REFRESH_TOKEN_EXPIRATION_SECONDS=7200'
+        -p 8080:8080
+        -d ghcr.io/m4urici0gm/url-shortener:latest
+```
+Check if the app is running with `curl 'http://localhost:8080/api/ping' | json_pp`.
+If everything went fine, you should be able to see the response like this:
+```json
+{
+   "message" : "Im alive and well!"
+}
+```
+
+## Running with Docker-Compose
+1. Open `docker-compose.yml`
+2. Change the required environment variables
+3. If you build the image locally, change the image property
+4. Start the apps with `docker-compose up -d`
+
 ## Running it locally (dev environment)
 1. Fork the repository
-2. Creates (if it doesnt exist) a .env file on the project root
-3. Build the project with ```./gradlew clean build```
-4. Run the project with ```./gradlew bootRun```
-5. The app should be running at ```http://localhost:8080```
+2. Make sure you have a running mongodb instance
+3. Creates (if it doesnt exist) a .env file on the project root (You can use the template below)
+4. Build the project with ```./gradlew clean build```
+5. Run the project with ```./gradlew bootRun```
+6. The app should be running at ```http://localhost:8080```
 
 ### Template file for .env
 ```
@@ -49,6 +81,6 @@ If you want to contact me you can reach me at contact@mgbarbosa.dev
 ## License
 <!--- If you're not sure which open license to use see https://choosealicense.com/--->
 
-This project uses the following license: [GPL-2.0](https://github.com/M4urici0GM/tcproxy/blob/main/LICENSE.md).
+This project uses the following license: [Mozilla Public License Version 2.0](https://github.com/M4urici0GM/url-shortener/blob/main/LICENSE.md).
 
 Done with :heart:

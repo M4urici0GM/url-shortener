@@ -6,14 +6,17 @@ import dev.mgbarbosa.urlshortner.exceptios.InvalidOperationException;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.AuthenticationService;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import javax.management.InvalidApplicationException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.AccessDeniedException;
+import javax.management.InvalidApplicationException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")

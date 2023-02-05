@@ -1,0 +1,24 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: blueScreen#666
+  shortener:
+    image: ghcr.io/m4urici0gm/url-shortener:latest
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_URL: mongodb://root:blueScreen%23666@mongodb:27017/url-shortener?directConnection=true&ssl=false&authSource=admin
+      JWT_ISSUER: http://localhost:8080/
+      JWT_AUDIENCE: url-shortener
+      JWT_SECRET: SOME_RANDOM_STRING
+      JWT_EXPIRATION_SECONDS: 7200
+      JWT_REFRESH_TOKEN_EXPIRATION_SECONDS: 7200
