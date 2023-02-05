@@ -68,7 +68,7 @@ bootRun {
         systemProperty('spring.config.import', 'optional:file:.env[.properties]')
     }
 
-    jvmArgs("-DconfigFileName=config/application.yaml", "-DchecksumEnabled=false")
+    jvmArgs("-DconfigFileName=config/application.deployment.yaml", "-DchecksumEnabled=false")
 }
 
 jacoco {
