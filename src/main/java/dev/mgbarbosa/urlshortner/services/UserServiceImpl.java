@@ -1,8 +1,8 @@
 package dev.mgbarbosa.urlshortner.services;
 
+import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.dtos.requests.PaginatedRequest;
 import dev.mgbarbosa.urlshortner.dtos.responses.PaginatedResponse;
-import dev.mgbarbosa.urlshortner.dtos.UserDto;
 import dev.mgbarbosa.urlshortner.entities.User;
 import dev.mgbarbosa.urlshortner.exceptios.EntityExists;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;

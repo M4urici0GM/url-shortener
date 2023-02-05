@@ -1,8 +1,7 @@
 package dev.mgbarbosa.urlshortner.repositories;
 
-import org.springframework.data.redis.core.RedisTemplate;
-
 import java.util.Optional;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * Base implementation for CachingRepository.

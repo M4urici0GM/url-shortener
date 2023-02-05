@@ -8,14 +8,13 @@ import dev.mgbarbosa.urlshortner.dtos.responses.JwtToken;
 import dev.mgbarbosa.urlshortner.entities.User;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
-import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.stereotype.Service;
-
-import javax.management.InvalidApplicationException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
+import javax.management.InvalidApplicationException;
+import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {

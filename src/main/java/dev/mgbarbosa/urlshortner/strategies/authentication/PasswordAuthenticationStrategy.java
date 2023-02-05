@@ -6,10 +6,9 @@ import dev.mgbarbosa.urlshortner.dtos.responses.AuthenticateResponseDto;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.SecurityCachingRepository;
 import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import dev.mgbarbosa.urlshortner.services.interfaces.SecurityService;
+import javax.management.InvalidApplicationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
-
-import javax.management.InvalidApplicationException;
 
 @Component("PasswordAuthenticationStrategy")
 public class PasswordAuthenticationStrategy implements AuthenticationStrategy {

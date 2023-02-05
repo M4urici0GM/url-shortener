@@ -26,6 +26,7 @@ public class ShortenedUrl implements Serializable {
     private LocalDateTime createdAt;
 
     private ShortenedUrl() {
+        this.id = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
     }
 
