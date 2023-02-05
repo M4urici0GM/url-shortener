@@ -1,13 +1,12 @@
 package dev.mgbarbosa.urlshortner.services.interfaces;
 
+import dev.mgbarbosa.urlshortner.dtos.Claim;
 import dev.mgbarbosa.urlshortner.dtos.responses.JwtToken;
 import dev.mgbarbosa.urlshortner.entities.User;
 import dev.mgbarbosa.urlshortner.security.AuthenticatedUserDetails;
-import dev.mgbarbosa.urlshortner.dtos.Claim;
-
-import javax.management.InvalidApplicationException;
 import java.time.Instant;
 import java.util.List;
+import javax.management.InvalidApplicationException;
 
 /**
  * Service responsible for security related tasks

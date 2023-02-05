@@ -1,16 +1,22 @@
 package dev.mgbarbosa.urlshortner.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import dev.mgbarbosa.urlshortner.dtos.ApiError;
 import dev.mgbarbosa.urlshortner.dtos.UserDto;
+import dev.mgbarbosa.urlshortner.entities.User;
+import dev.mgbarbosa.urlshortner.repositories.interfaces.UserRepository;
 import java.util.HashMap;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,10 +25,14 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @AutoConfigureDataMongo
 @DirtiesContext
+@SuppressWarnings("unchecked")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
+
+    @MockBean
+    private UserRepository userRepository;
 
 	@Test
 	@DisplayName("should create a user correctly")
@@ -34,6 +44,8 @@ public class UserControllerTests {
 				.password("blueScreen#666")
 				.username("m4urici0gm")
 				.build();
+
+        when(userRepository.save(any())).thenAnswer((Answer<User>) (invocation) -> invocation.getArgument(0));
 
 		// Act
 		final var response = restTemplate.postForEntity("/api/v1/user", userDto, UserDto.class);
