@@ -15,14 +15,14 @@ Before you begin, ensure you have met the following requirements:
 Start the container with
 ```
     docker run --name some-url-shortener \
-        --restart always
-        -e 'MONGODB_URL=<your-mongodb-connection-string>'
-        -e 'JWT_ISSUER=http://localhost:8080'
-        -e 'JWT_AUDIENCE=http://localhost:8080'
-        -e 'JWT_EXPIRATION_SECONDS=7200'
-        -e 'JWT_REFRESH_TOKEN_EXPIRATION_SECONDS=7200'
-        -p 8080:8080
-        -d ghcr.io/m4urici0gm/url-shortener:latest
+        --restart always \
+        -e 'MONGODB_URL=<your-mongodb-connection-string>' \
+        -e 'JWT_ISSUER=http://localhost:8080' \ 
+        -e 'JWT_AUDIENCE=http://localhost:8080' \
+        -e 'JWT_EXPIRATION_SECONDS=7200' \
+        -e 'JWT_REFRESH_TOKEN_EXPIRATION_SECONDS=7200' \
+        -p 8080:8080 \
+        -d ghcr.io/m4urici0gm/url-shortener:latest \
 ```
 Check if the app is running with `curl 'http://localhost:8080/api/ping' | json_pp`.
 If everything went fine, you should be able to see the response like this:
