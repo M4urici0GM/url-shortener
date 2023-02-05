@@ -38,7 +38,6 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.24'
     implementation 'com.github.javafaker:javafaker:1.0.2'
 
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.3.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'it.ozimov:embedded-redis:0.7.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
@@ -64,7 +63,11 @@ test {
 }
 
 bootRun {
-    systemProperty('spring.config.import', 'optional:file:.env[.properties]')
+    var isProduction = System.getenv("ENVIRONMENT")
+    if (!isProduction) {
+        systemProperty('spring.config.import', 'optional:file:.env[.properties]')
+    }
+
     jvmArgs("-DconfigFileName=config/application.yaml", "-DchecksumEnabled=false")
 }
 
