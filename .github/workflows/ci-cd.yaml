@@ -54,7 +54,7 @@ jobs:
       - name: Deploy to kubernetes
         uses: azure/k8s-deploy@v1
         with:
-          namespace: first-deploy
+          namespace: url-shortener
           manifests: |
             k8s/deployment.yaml
             k8s/certificate.yaml
