@@ -18,6 +18,27 @@ spec:
       containers:
         - name: url-shortener
           image: ghcr.io/m4urici0gm/url-shortener:v1.0.0
+          env:
+            - name: JWT_REFRESH_TOKEN_EXPIRATION_SECONDS
+              value: '7200'
+            - name: JWT_EXPIRATION_SECONDS
+              value: '7200'
+            - name: JWT_ISSUER
+              value: https://short.mgbarbosa.dev
+            - name: JWT_AUDIENCE
+              value: https://short.mgbarbosa.dev
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: value
+                  optional: false
+            - name: MONGODB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: url-shortener-connection-string
+                  key: value
+                  optional: false
           ports:
             - containerPort: 8080
           resources:
