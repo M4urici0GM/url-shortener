@@ -48,7 +48,7 @@ jobs:
         with:
           method: service-account
           k8s-url: https://144.22.179.129:6443
-          k8s-secret: ${{ secrets.KUBE_TOKEN }}
+          k8s-secret: ${{ secrets.KUBE_SECRET }}
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Deploy to kubernetes
