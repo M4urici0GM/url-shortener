@@ -24,9 +24,9 @@ spec:
             - name: JWT_EXPIRATION_SECONDS
               value: '7200'
             - name: JWT_ISSUER
-              value: https://short.mgbarbosa.dev
+              value: https://s.mgbarbosa.dev
             - name: JWT_AUDIENCE
-              value: https://short.mgbarbosa.dev
+              value: https://s.mgbarbosa.dev
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
