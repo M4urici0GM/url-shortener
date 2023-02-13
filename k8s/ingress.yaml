@@ -7,10 +7,10 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   tls:
-    - hosts: ["short.mgbarbosa.dev"]
+    - hosts: ["s.mgbarbosa.dev"]
       secretName: url-shortener-cert-secret
   rules:
-    - host: short.mgbarbosa.dev
+    - host: s.mgbarbosa.dev
       http:
         paths:
           - path: /api/
