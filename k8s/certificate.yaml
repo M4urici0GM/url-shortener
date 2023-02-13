@@ -9,7 +9,7 @@ spec:
   secretName: url-shortener-cert-secret
   issuerRef:
     # referencing the production issuer
-    name: letsencrypt-production
+    name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - short.mgbarbosa.dev
+    - s.mgbarbosa.dev
