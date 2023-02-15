@@ -5,7 +5,7 @@ metadata:
   namespace: url-shortener
 spec:
   selector:
-    app: node-app
+    app: url-shortener
   ports:
     - protocol: TCP
       port: 80
