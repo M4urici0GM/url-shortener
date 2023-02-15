@@ -2,8 +2,7 @@ name: Tests
 on:
   push:
     branches:
-      - '*'
-      - '!main'
+      - 'feature/**'
 jobs:
   run-tests:
     runs-on: ubuntu-latest
