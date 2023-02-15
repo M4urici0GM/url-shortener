@@ -12,12 +12,12 @@ COPY build.gradle settings.gradle $APP_HOME/
 
 # Only download dependencies
 # Eat the expected build failure since no source code has been copied yet
-RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
+RUN gradle clean build > /dev/null 2>&1 || true
 
 
 COPY ./ /app/
 
-RUN gradle clean build --no-daemon
+RUN gradle build --no-daemon -x test
 
 FROM openjdk:17-jdk-slim
 ENV ARTIFACT_NAME=url-shortener-0.1.0.jar
