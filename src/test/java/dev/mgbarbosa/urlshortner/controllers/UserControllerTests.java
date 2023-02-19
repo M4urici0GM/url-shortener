@@ -48,7 +48,7 @@ public class UserControllerTests {
         when(userRepository.save(any())).thenAnswer((Answer<User>) (invocation) -> invocation.getArgument(0));
 
 		// Act
-		final var response = restTemplate.postForEntity("/v1/user", userDto, UserDto.class);
+		final var response = restTemplate.postForEntity("/api/v1/user", userDto, UserDto.class);
 
 		// Assert
 		assertEquals(HttpStatusCode.valueOf(201), response.getStatusCode());
@@ -65,7 +65,7 @@ public class UserControllerTests {
 
 		// used only for getting the class type on runtime.
 		final var testObject = new ApiError<HashMap<String, String>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		final var response = restTemplate.postForEntity("/v1/user", userDto, testObject.getClass());
+		final var response = restTemplate.postForEntity("/api/v1/user", userDto, testObject.getClass());
 
 		final var responseBody = Objects.requireNonNull(response.getBody());
 		final var errors = (HashMap<String, String>) responseBody.getErrors();
@@ -86,7 +86,7 @@ public class UserControllerTests {
 
 		// used only for getting the class type on runtime.
 		final var testObject = new ApiError<HashMap<String, String>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		final var response = restTemplate.postForEntity("/v1/user", userDto, testObject.getClass());
+		final var response = restTemplate.postForEntity("/api/v1/user", userDto, testObject.getClass());
 
 		final var responseBody = Objects.requireNonNull(response.getBody());
 		final var errors = (HashMap<String, String>) responseBody.getErrors();
@@ -108,7 +108,7 @@ public class UserControllerTests {
 
 		// used only for getting the class type on runtime.
 		final var testObject = new ApiError<HashMap<String, String>>(HttpStatus.INTERNAL_SERVER_ERROR);
-		final var response = restTemplate.postForEntity("/v1/user", userDto, testObject.getClass());
+		final var response = restTemplate.postForEntity("/api/v1/user", userDto, testObject.getClass());
 
 		final var responseBody = Objects.requireNonNull(response.getBody());
 		final var errors = (HashMap<String, String>) responseBody.getErrors();
