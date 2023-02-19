@@ -29,11 +29,11 @@ public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
     public AuthenticateResponseDto execute(AuthenticateRequestDto request) throws InvalidApplicationException {
         var user = userRepository
                 .findByUsername(request.getUsername())
-                .orElseThrow(() ->  new AccessDeniedException("Username or password invalid"));
+                .orElseThrow(() ->  new AccessDeniedException("Invalid username or password"));
 
         var isPasswordValid = securityService.verifyPassword(request.getPassword(), user.getPasswordHash());
         if (!isPasswordValid) {
-            throw new AccessDeniedException("Username or password invalid");
+            throw new AccessDeniedException("Invalid username or password");
         }
 
         var generatedJwt = securityService.generateToken(user);
