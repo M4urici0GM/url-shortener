@@ -23,6 +23,7 @@ jobs:
         uses: azure/k8s-deploy@v1
         with:
           namespace: url-shortener
+          pull-images: true
           manifests: |
             k8s/deployment.yaml
             k8s/certificate.yaml
