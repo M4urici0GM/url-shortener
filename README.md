@@ -7,7 +7,31 @@ Before you begin, ensure you have met the following requirements:
 - Java JDK 17 or later
 - A running mongodb instance.
 
-## Running it with Docker
+## Public instance:
+I have a public instance running that you can consume/use:
+```
+ https://s.mgbarbosa.dev/api
+```
+
+You can access the Swagger docs with
+```
+https://s.mgbarbosa.dev/api/docs
+```
+
+Feel free to use the API (as long there's no abuse) for shortening/testing the API.
+
+## Running with Docker-Compose
+There's already a configured `docker-compose.yaml` file in the project root, so you can 
+easily start the project locally following the instructions:
+
+1. Open `docker-compose.yml`
+2. Change the required environment variables
+3. If you build the image locally, change the image property
+4. Start the apps with `docker-compose up -d`
+
+You should be able to reach the app accessing `http://localhost:8080/api/v1/ping` on your browser
+
+## Manually running it with Docker
 
 - Make sure that you have docker running 
 - Pull the image with: `docker pull ghcr.io/m4urici0gm/url-shortener:latest`
@@ -22,7 +46,7 @@ Start the container with
         -e 'JWT_EXPIRATION_SECONDS=7200' \
         -e 'JWT_REFRESH_TOKEN_EXPIRATION_SECONDS=7200' \
         -p 8080:8080 \
-        -d ghcr.io/m4urici0gm/url-shortener:latest \
+        -d ghcr.io/m4urici0gm/url-shortener:latest
 ```
 Check if the app is running with `curl 'http://localhost:8080/api/ping' | json_pp`.
 If everything went fine, you should be able to see the response like this:
@@ -31,12 +55,6 @@ If everything went fine, you should be able to see the response like this:
    "message" : "Im alive and well!"
 }
 ```
-
-## Running with Docker-Compose
-1. Open `docker-compose.yml`
-2. Change the required environment variables
-3. If you build the image locally, change the image property
-4. Start the apps with `docker-compose up -d`
 
 ## Running it locally (dev environment)
 1. Fork the repository
@@ -56,7 +74,7 @@ JWT_EXPIRATION_SECONDS=7200
 JWT_REFRESH_TOKEN_EXPIRATION_SECONDS=7200
 ```
 
-## Contributing to tcproxy
+## Contributing to the project
 To contribute to this project, follow these steps:
 
 1. Fork this repository.

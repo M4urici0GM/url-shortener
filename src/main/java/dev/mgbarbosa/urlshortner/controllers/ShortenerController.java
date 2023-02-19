@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/v1/shortener")
+@RequestMapping(path = "/api/v1/shortener")
 @PreAuthorize("permitAll()")
 public class ShortenerController {
     private final ShortenerService shortenerService;
