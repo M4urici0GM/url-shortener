@@ -56,7 +56,7 @@ public class AuthControllerTests {
     when(userRepository.findByUsername(userDto.getUsername())).thenReturn(Optional.of(userDto));
 
     // Act
-    final var response = restTemplate.postForEntity("/api/v1/auth", loginDto, AuthenticateResponseDto.class);
+    final var response = restTemplate.postForEntity("/v1/auth", loginDto, AuthenticateResponseDto.class);
 
     // Assert
     final var responseBody = Objects.requireNonNull(response.getBody());
@@ -88,10 +88,10 @@ public class AuthControllerTests {
     when(userRepository.findByUsername(userDto.getUsername())).thenReturn(Optional.of(userDto));
 
     // Act
-    final var loginResponse = restTemplate.postForEntity("/api/v1/auth", loginDto, AuthenticateResponseDto.class);
+    final var loginResponse = restTemplate.postForEntity("/v1/auth", loginDto, AuthenticateResponseDto.class);
     final var responseBody = Objects.requireNonNull(loginResponse.getBody());
 
-    final var baseUrl = restTemplate.getRootUri() + "/api/v1/auth/profile";
+    final var baseUrl = restTemplate.getRootUri() + "/v1/auth/profile";
     final var headers = new HttpHeaders();
     headers.set("Authorization", String.format("Bearer %s", responseBody.getToken().getToken()));
 
@@ -112,7 +112,7 @@ public class AuthControllerTests {
   @DisplayName("should 401 when trying to get profile and not authenticated")
   public void shouldReturn401WhenTryingToGetProfileButNotAuthenticated() {
     // Act
-    final var response = restTemplate.getForEntity("/api/v1/auth/profile", AuthenticatedUserDetails.class);
+    final var response = restTemplate.getForEntity("/v1/auth/profile", AuthenticatedUserDetails.class);
     // Assert
 
     assertEquals(HttpStatus.valueOf(401), response.getStatusCode());
