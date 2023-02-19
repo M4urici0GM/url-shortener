@@ -79,6 +79,7 @@ jacocoTestReport {
     dependsOn 'test'
 
     reports {
+        xml.required = true
         xml.enabled true
         html.enabled true
     }
