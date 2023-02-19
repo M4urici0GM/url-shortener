@@ -22,7 +22,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run gradle tests
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew clean build jacocoTestReport
 
       - name: Upload Report
         uses: 'actions/upload-artifact@v2'
@@ -39,6 +39,7 @@ jobs:
           min-coverage-overall: 80
           min-coverage-changed-files: 100
           debug-mode: true
+          title: 'Your tests results'
 
       - name: Get the Coverage info
         run: |
