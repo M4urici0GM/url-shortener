@@ -1,8 +1,7 @@
 name: Tests and Coverage
 on:
   push:
-    push:
-      branches: [ main ]
+    branches: [ main ]
   pull_request:
 jobs:
   run-tests:
