@@ -15,6 +15,7 @@ spec:
       http:
         paths:
           - path: /api(/|$)(.*)
+            pathType: Prefix
             backend:
               service:
                 name: url-shortener-service
