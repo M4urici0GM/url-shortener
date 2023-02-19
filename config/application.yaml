@@ -6,6 +6,10 @@ spring:
     mongodb:
       uri: ${MONGODB_URL}
       uuid-representation: standard
+server:
+  error:
+    whitelabel:
+      enabled: false
 springdoc:
   api-docs:
     path: /api/v1/docs-file
