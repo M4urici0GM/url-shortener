@@ -26,7 +26,6 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("permitAll()")
     ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto request) throws EntityExists, URISyntaxException {
         var user = userService.createUser(request);
         return ResponseEntity.created(new URI("")).body(user);
