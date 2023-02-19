@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @PreAuthorize("permitAll()")
-@RequestMapping(path = "/api/v1/ping")
+@RequestMapping(path = "/v1/ping")
 public class PingController {
 
 	@GetMapping
