@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: url-shortener
-          image: ghcr.io/m4urici0gm/url-shortener:v1.0.0
+          image: ghcr.io/m4urici0gm/url-shortener:latest
+          imagePullPolicy: Always
           env:
             - name: JWT_REFRESH_TOKEN_EXPIRATION_SECONDS
               value: '7200'
