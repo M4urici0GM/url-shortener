@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'feature/**'
+      - 'fix/**'
 jobs:
   run-tests:
     runs-on: ubuntu-latest
