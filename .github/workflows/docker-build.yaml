@@ -1,24 +1,11 @@
-name: CI/CD
+name: Build Docker Image
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [ "Tests and Coverage" ]
+    branches: [ main ]
+    types:
+      - completed
 jobs:
-  tests:
-    name: Run tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Run gradle tests
-        run: ./gradlew clean test
   build:
     needs: [tests]
     name: Docker Build
@@ -68,7 +55,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Deploy to kubernetes
-        uses: azure/k8s-deploy@v1
+        uses: azure/k8s-deploy-k8s.yaml@v1
         with:
           namespace: url-shortener
           manifests: |

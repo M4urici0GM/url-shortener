@@ -1,8 +1,12 @@
 name: Tests and Coverage
 on:
   push:
+    push:
+      branches: [ main ]
+    pull_request:
     branches:
       - 'feature/**'
+      - 'fix/**'
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -18,29 +22,22 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run gradle tests
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew clean build jacocoTestReport
 
-      - name: Upload Report
-        uses: 'actions/upload-artifact@v2'
+      # generates coverage-report.md and publishes as checkrun
+      - name: JaCoCo Code Coverage Report
+        id: jacoco_reporter
+        uses: PavanMudigonda/jacoco-reporter@v4.8
         with:
-          name: report.xml
-          path: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          coverage_results_path: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          coverage_report_name: Coverage
+          coverage_report_title: JaCoCo
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_check_run: false
+          minimum_coverage: 80
+          fail_below_threshold: true
+          publish_only_summary: false
 
-      - name: Jacoco Report to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.1
-        with:
-          path: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 40
-          min-coverage-changed-files: 60
-          debug-mode: false
-
-      - name: Get the Coverage info
-        run: |
-          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
-          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-
-
-
-          
+      # Publish Coverage Job Summary  # Optional
+      - name: Add Coverage Job Summary
+        run: echo "${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_STEP_SUMMARY
