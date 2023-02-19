@@ -18,13 +18,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run gradle tests
-        run: ./gradlew clean test
+        run: ./gradlew jacocoTestReport
 
       - name: Jacoco Report to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.1
         with:
-          path: build/reports/jacoco/test/jacocoTestReport.xml
+          path: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 60
