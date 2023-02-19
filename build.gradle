@@ -76,6 +76,8 @@ jacoco {
 }
 
 jacocoTestReport {
+    dependsOn 'test'
+
     reports {
         xml.enabled true
         html.enabled true
