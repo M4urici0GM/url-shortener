@@ -15,7 +15,7 @@ jobs:
         uses: azure/k8s-set-context@v2
         with:
           method: service-account
-          k8s-url: https://turing.mgbarbosa.dev:6443
+          k8s-url: ${{ secrets.KUBE_ADDR }}
           k8s-secret: ${{ secrets.KUBE_SECRET }}
       - name: Checkout code
         uses: actions/checkout@v3
