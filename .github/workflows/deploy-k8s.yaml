@@ -1,0 +1,33 @@
+name: Deploy to kubernetes
+on:
+  workflow_run:
+    workflows: [ "Build Docker Image" ]
+    branches: [ main ]
+    types:
+      - completed
+jobs:
+  deploy:
+    name: Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Set Kubernetes Context
+        uses: azure/k8s-set-context@v2
+        with:
+          method: service-account
+          k8s-url: https://turing.mgbarbosa.dev:6443
+          k8s-secret: ${{ secrets.KUBE_SECRET }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Deploy to kubernetes
+        uses: azure/k8s-deploy-k8s.yaml@v1
+        with:
+          namespace: url-shortener
+          manifests: |
+            k8s/deployment.yaml
+            k8s/certificate.yaml
+            k8s/ingress.yaml
+            k8s/service.yaml
+          images: |
+            ghcr.io/m4urici0gm/url-shortener:latest
