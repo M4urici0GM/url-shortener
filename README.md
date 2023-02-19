@@ -8,14 +8,10 @@ Before you begin, ensure you have met the following requirements:
 - A running mongodb instance.
 
 ## Public instance:
-I have a public instance running that you can consume/use:
-```
- https://s.mgbarbosa.dev/api
-```
-
+I have a public instance running that you can consume/use.
 You can access the Swagger docs with
 ```
-https://s.mgbarbosa.dev/api/docs
+https://s.mgbarbosa.dev/api/v1/docs
 ```
 
 Feel free to use the API (as long there's no abuse) for shortening/testing the API.
