@@ -1,12 +1,8 @@
 name: Tests and Coverage
 on:
   push:
-    push:
-      branches: [ main ]
-    pull_request:
-    branches:
-      - 'feature/**'
-      - 'fix/**'
+    branches: [ main ]
+  pull_request:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
