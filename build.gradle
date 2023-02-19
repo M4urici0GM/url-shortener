@@ -92,10 +92,6 @@ jacocoTestReport {
                     ])
         })
     }
-
-    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main")
-    classDirectories.from = files([javaClasses])
-    executionData.from = files("${project.buildDir}/jacoco/test.exec")
 }
 
 tasks.withType(JavaCompile) {
