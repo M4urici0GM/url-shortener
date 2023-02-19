@@ -76,10 +76,12 @@ jacoco {
 }
 
 jacocoTestReport {
+    dependsOn 'test'
+
     reports {
+        xml.required = true
         xml.enabled true
         html.enabled true
-        xml.outputLocation = file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
     }
 
     afterEvaluate {
