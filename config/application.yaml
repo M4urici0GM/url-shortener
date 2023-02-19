@@ -6,6 +6,9 @@ spring:
     mongodb:
       uri: ${MONGODB_URL}
       uuid-representation: standard
+springdoc:
+  swagger-ui:
+    path: /api/docs
 jwt:
   expiration-seconds: ${JWT_EXPIRATION_SECONDS}
   secret: ${JWT_SECRET}
