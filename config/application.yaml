@@ -8,9 +8,9 @@ spring:
       uuid-representation: standard
 springdoc:
   api-docs:
-    path: /api/docs-file
+    path: /v1/docs-file
   swagger-ui:
-    path: /api/docs
+    path: /v1/docs
 jwt:
   expiration-seconds: ${JWT_EXPIRATION_SECONDS}
   secret: ${JWT_SECRET}
