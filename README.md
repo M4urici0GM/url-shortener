@@ -2,11 +2,6 @@
 
 An open source ready for usage url shortener.
 
-## Prerequisites
-Before you begin, ensure you have met the following requirements:
-- Java JDK 17 or later
-- A running mongodb instance.
-
 ## Public instance:
 I have a public instance running that you can consume/use.
 You can access the Swagger docs with
@@ -15,6 +10,56 @@ https://s.mgbarbosa.dev/api/v1/docs
 ```
 
 Feel free to use the API (as long there's no abuse) for shortening/testing the API.
+
+## Roadmap
+- [x] Creating new Shortened URL
+- [x] Fetching shorted URL
+- [x] Redirect endpoint
+- [x] Create User
+- [x] Create private url (that belongs to a specfic user)
+- [ ] User's shortened URL management
+- [ ] Auto-expiring URLs
+- [ ] URL usage/metrics
+
+## Basic Usage
+
+The endpoints below are basic usage, there's also more features, but they are on beta, that being said, it will not be included for now.
+
+### Creating new shortened URL
+```
+curl -X POST 'https://s.mgbarbosa.dev/api/v1/shortener' \
+              -H 'Content-Type: application/json' \
+              -d '{"url": "https://www.reuters.com/article/urnidgns002570f3005978d8002576f60035a6bb-idUS98192761820100330"}'
+              
+Response:
+{
+   "id": "2b99abe2-1f24-4964-91e5-f7517f4dc16b",
+   "createdAt": "2023-02-20T00:04:27.977013737",
+   "originalUrl": "SOME_LONG_URL",
+   "shortenedUrl": "https://www.reuters.com/article/urnidgns002570f3005978d8002576f60035a6bb-idUS98192761820100330"
+}
+```
+
+### Fetching Shortened URL details
+```
+curl -X GET 'https://s.mgbarbosa.dev/api/v1/shortener/mjprJAuqhm'
+
+Response:
+{
+   "id": "2b99abe2-1f24-4964-91e5-f7517f4dc16b",
+   "createdAt": "2023-02-20T00:04:27.977013737",
+   "originalUrl": "SOME_LONG_URL",
+   "shortenedUrl": "https://www.reuters.com/article/urnidgns002570f3005978d8002576f60035a6bb-idUS98192761820100330"
+}
+```
+
+### Redirect to URL
+This endpoint is exclusively for being redirect to the original url. Paste the URL
+below to your browser and you will be redirected.
+```
+https://s.mgbarbosa.dev/api/v1/redirect/mjprJAuqhm
+```
+
 
 ## Running with Docker-Compose
 There's already a configured `docker-compose.yaml` file in the project root, so you can 
@@ -51,6 +96,11 @@ If everything went fine, you should be able to see the response like this:
    "message" : "Im alive and well!"
 }
 ```
+
+## Prerequisites
+Before you begin, ensure you have met the following requirements:
+- Java JDK 17 or later
+- A running mongodb instance.
 
 ## Running it locally (dev environment)
 1. Fork the repository
