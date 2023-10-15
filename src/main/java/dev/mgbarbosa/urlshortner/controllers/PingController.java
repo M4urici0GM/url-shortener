@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PingController {
 
 	@GetMapping
-	public ResponseEntity<HealthCheckResponseDto> healthCheck() {
-		return ResponseEntity.ok()
-			.body(HealthCheckResponseDto
+	public HealthCheckResponseDto healthCheck() {
+		return HealthCheckResponseDto
 				.builder()
 				.message("Im alive and well!")
-				.build());
+				.build();
 	}
 }

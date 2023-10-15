@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,15 +17,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * Responsible for reading, and validating token sent in Authorization Header.
  */
 @Component
+@RequiredArgsConstructor
 public class JwtSecurityFilter extends OncePerRequestFilter {
     private final SecurityService securityService;
     private final CustomUserDetailsService userDetailService;
-
-    public JwtSecurityFilter(SecurityService jwtUtils, CustomUserDetailsService userDetailService) {
-        this.securityService = jwtUtils;
-        this.userDetailService = userDetailService;
-    }
-
 
     /**
      * Responsible for filtering and/or denying unauthorized http requests.

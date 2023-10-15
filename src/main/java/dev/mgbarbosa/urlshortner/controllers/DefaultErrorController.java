@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DefaultErrorController implements ErrorController {
 
-  @GetMapping(path = "/error")
-  public ResponseEntity<ApiError<Object>> notFound() {
-    final var apiError = new ApiError<>(HttpStatus.NOT_FOUND, "The requested path was not found.");
-    return new ResponseEntity<>(apiError, apiError.getHttpStatus());
-  }
+    @GetMapping(path = "/error")
+    public ResponseEntity<ApiError<Object>> notFound() {
+        final var apiError = new ApiError<>(HttpStatus.NOT_FOUND, "The requested path was not found.");
+        return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+    }
 }

@@ -8,13 +8,11 @@ import dev.mgbarbosa.urlshortner.services.interfaces.UserService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/user")
@@ -26,15 +24,14 @@ public class UserController {
     }
 
     @PostMapping
-    ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto request) throws EntityExists, URISyntaxException {
-        var user = userService.createUser(request);
-        return ResponseEntity.created(new URI("")).body(user);
+    @ResponseStatus(HttpStatus.CREATED)
+    UserDto createUser(@Valid @RequestBody UserDto request) throws EntityExists {
+        return userService.createUser(request);
     }
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    ResponseEntity<PaginatedResponse<UserDto>> findAll(@Valid PaginatedRequest request) {
-        var users = userService.getUsers(request);
-        return ResponseEntity.ok().body(users);
+    PaginatedResponse<UserDto> findAll(@Valid PaginatedRequest request) {
+         return userService.getUsers(request);
     }
 }

@@ -14,15 +14,13 @@ import org.springframework.stereotype.Component;
 public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
     private final UserRepository userRepository;
     private final SecurityService securityService;
-    private final SecurityCachingRepository _securityCache;
 
     public PasswordAuthenticationStrategy(
             UserRepository userRepository,
-            SecurityService securityService,
-            SecurityCachingRepository securityCache) {
+            SecurityService securityService
+    ) {
         this.userRepository = userRepository;
         this.securityService = securityService;
-        _securityCache = securityCache;
     }
 
     @Override
@@ -38,8 +36,6 @@ public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
 
         var generatedJwt = securityService.generateToken(user);
         var refreshToken = securityService.generateRefreshToken(user);
-
-        _securityCache.storeRefreshToken(refreshToken, user);
 
         return new AuthenticateResponseDto(
                 new UserDto(user),
